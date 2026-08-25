@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "sender": "0x00000000000000000000000000000000000000000000000000000000000000aa",
+  "expiration": null,
+  "gasData": {
+    "budget": null,
+    "price": null,
+    "owner": null,
+    "payment": null
+  },
+  "inputs": [
+    {
+      "UnresolvedObject": {
+        "objectId": "0x00000000000000000000000000000000000000000000000000000000000000bb"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "MoveCall": {
+        "package": "0xd874d2417a55bfa6479bffa06ad950fea144ef93a94cc6c49f32b03e386bbb24",
+        "module": "balance_manager",
+        "function": "mint_trade_cap",
+        "typeArguments": [],
+        "arguments": [
+          {
+            "Input": 0
+          }
+        ]
+      }
+    },
+    {
+      "MoveCall": {
+        "package": "0xd874d2417a55bfa6479bffa06ad950fea144ef93a94cc6c49f32b03e386bbb24",
+        "module": "balance_manager",
+        "function": "generate_proof_as_owner",
+        "typeArguments": [],
+        "arguments": [
+          {
+            "Input": 0
+          }
+        ]
+      }
+    }
+  ]
+}

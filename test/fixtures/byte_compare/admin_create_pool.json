@@ -1,0 +1,84 @@
+{
+  "version": 2,
+  "sender": "0x00000000000000000000000000000000000000000000000000000000000000aa",
+  "expiration": null,
+  "gasData": {
+    "budget": null,
+    "price": null,
+    "owner": null,
+    "payment": null
+  },
+  "inputs": [
+    {
+      "UnresolvedObject": {
+        "objectId": "0x7c256edbda983a2cd6f946655f4bf3f00a41043993781f8674a7046e8c0e11d1"
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AMqaOwAAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "QEIPAAAAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "gJaYAAAAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AQ=="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AA=="
+      }
+    },
+    {
+      "UnresolvedObject": {
+        "objectId": "0x00000000000000000000000000000000000000000000000000000000000000cc"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "MoveCall": {
+        "package": "0xd874d2417a55bfa6479bffa06ad950fea144ef93a94cc6c49f32b03e386bbb24",
+        "module": "pool",
+        "function": "create_pool_admin",
+        "typeArguments": [
+          "0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::deep::DEEP",
+          "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI"
+        ],
+        "arguments": [
+          {
+            "Input": 0
+          },
+          {
+            "Input": 1
+          },
+          {
+            "Input": 2
+          },
+          {
+            "Input": 3
+          },
+          {
+            "Input": 4
+          },
+          {
+            "Input": 5
+          },
+          {
+            "Input": 6
+          }
+        ]
+      }
+    }
+  ]
+}

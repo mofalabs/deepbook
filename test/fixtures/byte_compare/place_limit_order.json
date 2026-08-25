@@ -1,0 +1,136 @@
+{
+  "version": 2,
+  "sender": "0x00000000000000000000000000000000000000000000000000000000000000aa",
+  "expiration": null,
+  "gasData": {
+    "budget": "250000000",
+    "price": null,
+    "owner": null,
+    "payment": null
+  },
+  "inputs": [
+    {
+      "UnresolvedObject": {
+        "objectId": "0x00000000000000000000000000000000000000000000000000000000000000bb"
+      }
+    },
+    {
+      "UnresolvedObject": {
+        "objectId": "0x1c19362ca52b8ffd7a33cee805a67d40f31e6ba303753fd3a4cfdfacea7163a5"
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "OTAAAAAAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AA=="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AA=="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "oCUmAAAAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AIY7oQEAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AQ=="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "AQ=="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "mZmZmZmZmRk="
+      }
+    },
+    {
+      "Object": {
+        "SharedObject": {
+          "objectId": "0x0000000000000000000000000000000000000000000000000000000000000006",
+          "initialSharedVersion": 1,
+          "mutable": false
+        }
+      }
+    }
+  ],
+  "commands": [
+    {
+      "MoveCall": {
+        "package": "0xd874d2417a55bfa6479bffa06ad950fea144ef93a94cc6c49f32b03e386bbb24",
+        "module": "balance_manager",
+        "function": "generate_proof_as_owner",
+        "typeArguments": [],
+        "arguments": [
+          {
+            "Input": 0
+          }
+        ]
+      }
+    },
+    {
+      "MoveCall": {
+        "package": "0xd874d2417a55bfa6479bffa06ad950fea144ef93a94cc6c49f32b03e386bbb24",
+        "module": "pool",
+        "function": "place_limit_order",
+        "typeArguments": [
+          "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+          "0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC"
+        ],
+        "arguments": [
+          {
+            "Input": 1
+          },
+          {
+            "Input": 0
+          },
+          {
+            "Result": 0
+          },
+          {
+            "Input": 2
+          },
+          {
+            "Input": 3
+          },
+          {
+            "Input": 4
+          },
+          {
+            "Input": 5
+          },
+          {
+            "Input": 6
+          },
+          {
+            "Input": 7
+          },
+          {
+            "Input": 8
+          },
+          {
+            "Input": 9
+          },
+          {
+            "Input": 10
+          }
+        ]
+      }
+    }
+  ]
+}

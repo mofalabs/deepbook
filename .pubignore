@@ -1,0 +1,13 @@
+# pub ignores .gitignore when this file exists, so repeat everything here.
+.dart_tool/
+build/
+.packages
+pubspec.lock
+doc/api/
+.DS_Store
+
+pubspec_overrides.yaml
+tool/localnet/localnet_ids.json
+tool/localnet/margin_state.json
+
+test/fixtures/

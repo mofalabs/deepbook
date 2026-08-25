@@ -42,3 +42,7 @@ doc/api/
 *.ipr
 *.iws
 .idea/
+
+pubspec_overrides.yaml
+tool/localnet/localnet_ids.json
+tool/localnet/margin_state.json

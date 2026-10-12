@@ -129,6 +129,7 @@ class DeepBookClient {
     String? marginMaintainerCap,
     DeepbookPackageIds? packageIds,
     PythConfig? pyth,
+    String? pythAccessToken,
   }) {
     config = DeepBookConfig(
       network: network,
@@ -143,6 +144,7 @@ class DeepBookClient {
       marginMaintainerCap: marginMaintainerCap,
       packageIds: packageIds,
       pyth: pyth,
+      pythAccessToken: pythAccessToken,
     );
 
     balanceManager = BalanceManagerContract(config);

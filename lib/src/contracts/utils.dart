@@ -78,8 +78,39 @@ const _wellKnownObjects = {
   '0x2::clock::Clock': '0x6',
   '0x2::random::Random': '0x8',
   '0x2::deny_list::DenyList': '0x403',
+  '0x2::accumulator::AccumulatorRoot': '0xacc',
   '0x3::sui_system::SuiSystemState': '0x5',
 };
+
+/// Fills named [arguments] (a `Map`, or null for none) with values from
+/// [config] for the parameters listed in [defaults] (`param → config key`).
+/// Mirrors the generated `{ ...options.arguments, x: options.arguments?.x ??
+/// options.config?.y }` merge of the config-mapped builders.
+Map<String, dynamic> withConfigDefaults(
+  dynamic arguments,
+  Map<String, dynamic>? config,
+  Map<String, String> defaults,
+) {
+  if (arguments != null && arguments is! Map) {
+    throw ArgumentError(
+        'Expected named (Map) arguments for a config-mapped builder');
+  }
+  final merged = arguments == null
+      ? <String, dynamic>{}
+      : Map<String, dynamic>.from(arguments as Map);
+  for (final entry in defaults.entries) {
+    if (merged[entry.key] != null) continue;
+    final value = config?[entry.value];
+    if (value != null) {
+      merged[entry.key] = value;
+    } else {
+      merged.remove(entry.key);
+      throw ArgumentError('Parameter ${entry.key} is required '
+          '(pass it in arguments or provide config.${entry.value})');
+    }
+  }
+  return merged;
+}
 
 /// Normalizes named (`Map`) or positional (`List`) arguments into transaction
 /// arguments, serializing pure values by their Move type and passing object
@@ -170,15 +201,23 @@ String buildMoveTypeTag(
 
   var result = name;
   if (typeArguments != null) {
+    final baked = lt == -1
+        ? const <String>[]
+        : _splitTopLevelTypeArgs(name.substring(lt + 1, name.length - 1));
     final supplied = typeArguments.map((arg) {
       if (arg is String) return arg;
       if (arg is BcsType) return arg.name;
       throw ArgumentError('Invalid type argument $arg');
     }).toList();
+    if (supplied.length != baked.length) {
+      throw ArgumentError('Expected ${baked.length} type arguments for $base, '
+          'got ${supplied.length}');
+    }
     result = supplied.isEmpty ? base : '$base<${supplied.join(', ')}>';
   }
 
-  if (RegExp(r'phantom [A-Za-z_$][A-Za-z0-9_$]*').hasMatch(result)) {
+  final hasPhantom = RegExp(r'phantom [A-Za-z_$][A-Za-z0-9_$]*');
+  if (hasPhantom.hasMatch(result)) {
     throw ArgumentError(typeArguments != null
         ? 'A type argument contains an unfilled phantom parameter in $result'
         : 'Missing type arguments for $result');
@@ -188,7 +227,31 @@ String buildMoveTypeTag(
     final parts = result.split('::');
     result = ([package, ...parts.sublist(1)]).join('::');
   }
+
+  // Fully validate address-only tags (MVR names can't be parsed as type tags).
+  if (!hasPhantom.hasMatch(result) && !RegExp(r'[@/]').hasMatch(result)) {
+    TypeTagSerializer.parseFromStr(result);
+  }
   return result;
+}
+
+/// Splits `A, B<C, D>, E` on top-level commas only.
+List<String> _splitTopLevelTypeArgs(String src) {
+  final parts = <String>[];
+  var depth = 0;
+  final current = StringBuffer();
+  for (final char in src.split('')) {
+    if (char == ',' && depth == 0) {
+      parts.add(current.toString().trim());
+      current.clear();
+      continue;
+    }
+    if (char == '<') depth++;
+    if (char == '>') depth--;
+    current.write(char);
+  }
+  if (current.isNotEmpty) parts.add(current.toString().trim());
+  return parts;
 }
 
 /// Parses BCS [bytes] with [schema]; convenience for query-layer code reading

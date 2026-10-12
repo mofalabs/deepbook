@@ -16,12 +16,11 @@ final MigrateComplete = Bcs.struct('${$moduleName}::MigrateComplete', {
   'package': SuiBcs.Address,
 });
 
-MoveCallBuilder migrate({String? package}) {
+MoveCallBuilder migrate({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::migrate::migrate',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }

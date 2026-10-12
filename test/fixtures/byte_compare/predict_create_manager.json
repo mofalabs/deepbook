@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "sender": "0x00000000000000000000000000000000000000000000000000000000000000aa",
+  "expiration": null,
+  "gasData": {
+    "budget": null,
+    "price": null,
+    "owner": null,
+    "payment": null
+  },
+  "inputs": [
+    {
+      "UnresolvedObject": {
+        "objectId": "0x511e11f7f5d5c1043d795180657603d59e06e90fbfcafd3f90c67ff0836bbd0c"
+      }
+    }
+  ],
+  "commands": [
+    {
+      "MoveCall": {
+        "package": "0x1e57d6554b99e4ca68330322c3e5c409ba1b681642726b603bf1be92c1840ca9",
+        "module": "account_registry",
+        "function": "new",
+        "typeArguments": [],
+        "arguments": [
+          {
+            "Input": 0
+          }
+        ]
+      }
+    },
+    {
+      "MoveCall": {
+        "package": "0x1e57d6554b99e4ca68330322c3e5c409ba1b681642726b603bf1be92c1840ca9",
+        "module": "account",
+        "function": "share",
+        "typeArguments": [],
+        "arguments": [
+          {
+            "Result": 0
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -10,6 +10,11 @@ import 'package:sui/sui.dart' show Transaction, TransactionResult;
 
 import '../config.dart';
 import '../contracts/deepbook_margin/margin_manager.dart' as margin_manager;
+// Oracle-taking entrypoints live in the parallel `_upgraded` module, which
+// takes Pyth's upgraded-Core `PriceInfoObject`. Entrypoints with no oracle
+// argument stay on the base module, which is the only place they exist.
+import '../contracts/deepbook_margin/margin_manager_upgraded.dart'
+    as margin_manager_upgraded;
 import '../conversion.dart';
 import '../types.dart';
 
@@ -137,13 +142,13 @@ class MarginManagerContract {
                 convertQuantity(params.amount!, depositCoin.scalar))
             : params.coin;
 
-        margin_manager.deposit(
+        margin_manager_upgraded.deposit(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'coin': coin,
           },
           typeArguments: [baseCoin.type, quoteCoin.type, depositCoin.type],
@@ -162,13 +167,13 @@ class MarginManagerContract {
             ? tx.coin(
                 baseCoin.type, convertQuantity(params.amount!, baseCoin.scalar))
             : params.coin;
-        margin_manager.deposit(
+        margin_manager_upgraded.deposit(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'coin': coin,
           },
           typeArguments: [baseCoin.type, quoteCoin.type, baseCoin.type],
@@ -187,13 +192,13 @@ class MarginManagerContract {
             ? tx.coin(quoteCoin.type,
                 convertQuantity(params.amount!, quoteCoin.scalar))
             : params.coin;
-        margin_manager.deposit(
+        margin_manager_upgraded.deposit(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'coin': coin,
           },
           typeArguments: [baseCoin.type, quoteCoin.type, quoteCoin.type],
@@ -213,13 +218,13 @@ class MarginManagerContract {
             ? tx.coin(
                 deepCoin.type, convertQuantity(params.amount!, deepCoin.scalar))
             : params.coin;
-        margin_manager.deposit(
+        margin_manager_upgraded.deposit(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'coin': coin,
           },
           typeArguments: [baseCoin.type, quoteCoin.type, deepCoin.type],
@@ -238,15 +243,15 @@ class MarginManagerContract {
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.withdraw(
+        return margin_manager_upgraded.withdraw(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'pool': pool.address,
             'withdrawAmount': convertQuantity(amount, baseCoin.scalar),
           },
@@ -266,15 +271,15 @@ class MarginManagerContract {
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.withdraw(
+        return margin_manager_upgraded.withdraw(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'pool': pool.address,
             'withdrawAmount': convertQuantity(amount, quoteCoin.scalar),
           },
@@ -295,15 +300,15 @@ class MarginManagerContract {
         final deepCoin = _config.getCoin('DEEP');
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.withdraw(
+        return margin_manager_upgraded.withdraw(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'pool': pool.address,
             'withdrawAmount': convertQuantity(amount, deepCoin.scalar),
           },
@@ -322,14 +327,14 @@ class MarginManagerContract {
         final baseCoin = _config.getCoin(pool.baseCoin);
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
-        return margin_manager.borrowBase(
+        return margin_manager_upgraded.borrowBase(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
             'baseMarginPool': baseMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'pool': pool.address,
             'loanAmount': convertQuantity(amount, baseCoin.scalar),
           },
@@ -348,14 +353,14 @@ class MarginManagerContract {
         final baseCoin = _config.getCoin(pool.baseCoin);
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.borrowQuote(
+        return margin_manager_upgraded.borrowQuote(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'registry': _config.MARGIN_REGISTRY_ID,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'pool': pool.address,
             'loanAmount': convertQuantity(amount, quoteCoin.scalar),
           },
@@ -427,13 +432,13 @@ class MarginManagerContract {
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
         final marginPool = debtIsBase ? baseMarginPool : quoteMarginPool;
-        return margin_manager.liquidate(
+        return margin_manager_upgraded.liquidate(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': managerAddress,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'marginPool': marginPool.address,
             'pool': pool.address,
             'repayCoin': repayCoin,
@@ -665,13 +670,13 @@ class MarginManagerContract {
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.managerState(
+        return margin_manager_upgraded.managerState(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': marginManagerId,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,

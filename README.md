@@ -3,12 +3,14 @@
 Dart/Flutter SDK for [DeepBook V3](https://deepbook.tech) — the decentralized
 central limit order book (CLOB) on [Sui](https://sui.io). A faithful port of
 the official [`@mysten/deepbook-v3`](https://www.npmjs.com/package/@mysten/deepbook-v3)
-TypeScript SDK (v1.6.2), running on the gRPC(-web) transport of
+TypeScript SDK (v2.6.8), running on the gRPC(-web) transport of
 [`package:sui`](https://pub.dev/packages/sui) ≥ 0.5.0.
 
-> **v0.1.0 is a complete rewrite.** The previous 0.0.x releases targeted
-> DeepBook **V2** (`0xdee9`), which has been decommissioned on-chain, and used
-> the now-sunset JSON-RPC API. Nothing from 0.0.x survives; see CHANGELOG.
+> **History:** 0.1.0 was a complete rewrite — the 0.0.x releases targeted
+> DeepBook **V2** (`0xdee9`), decommissioned on-chain, over the now-sunset
+> JSON-RPC API, and nothing from them survives. 0.2.0 moves margin onto
+> Pyth's upgraded Core and adds Predict, sessions and the account primitive.
+> See CHANGELOG.
 
 ## Coverage
 
@@ -21,8 +23,20 @@ Full parity with the official TS SDK surface:
   parameters, account state, quantity quotes, registry, margin state.
 - **Margin trading** — margin managers, margin pools, leveraged orders via
   pool proxy, TP/SL conditional orders, liquidations, maintainer/admin ops.
-- **Pyth** — Hermes price service client, wormhole VAA verification and
+  Targets Pyth's upgraded Core (the only deployment the official SDK
+  supports); price updates need a Hermes credential via `pythAccessToken`.
+- **Pyth** — Hermes (v2) price service client, wormhole VAA verification and
   on-chain price feed updates.
+- **Predict** (`package:deepbook/predict.dart`) — prediction markets: market
+  discovery, quotes, mint/redeem/claim, PLP, typed receipts, and client-side
+  all-in cost previews that are an exact integer port of the on-chain fee
+  path.
+- **Account & sessions** (`package:deepbook/account.dart`,
+  `package:deepbook/sessions.dart`) — the shared on-chain account primitive
+  and time-limited trading sessions over it, mirroring the official SDK's
+  `/account` and `/sessions` subpaths. Like the official package root,
+  `package:deepbook/deepbook.dart` is unchanged — the new surfaces are
+  separate entry points.
 - **Admin** — pool creation/tuning, version management, stablecoin whitelist
   (requires the `DeepbookAdminCap`).
 
@@ -30,7 +44,7 @@ Full parity with the official TS SDK surface:
 
 ```yaml
 dependencies:
-  deepbook: ^0.1.0
+  deepbook: ^0.2.0
   sui: ^0.5.0
 ```
 
@@ -97,13 +111,18 @@ dart format lib/src/contracts
 
 ## Testing
 
-- `flutter test test/config_test.dart test/byte_compare_test.dart` — offline
-  (the byte-compare suite verifies builder output against fixtures produced
-  by the official TS SDK). The fixtures live in the repository but are not
-  shipped in the published package; the suite skips itself when they are
-  absent, and `tool/byte_compare/gen_fixtures.mjs` regenerates them.
+- `flutter test test/config_test.dart test/byte_compare_test.dart
+  test/account_sessions_byte_compare_test.dart
+  test/predict_byte_compare_test.dart test/predict_cost_test.dart
+  test/pyth_offline_test.dart` — offline. The byte-compare suites verify
+  builder output against fixtures produced by the official TS SDK
+  (`tool/byte_compare/gen_fixtures*.mjs` regenerates them), and the Predict
+  cost suite asserts bit-exact parity with the official fee engine. The
+  fixtures live in the repository but are not shipped in the published
+  package; the suites skip themselves when they are absent.
 - `flutter test test/balance_manager_live_test.dart test/queries_live_test.dart
-  test/pyth_live_test.dart` — live against public testnet.
+  test/predict_live_test.dart test/pyth_live_test.dart` — live against
+  public testnet.
 - `test/*_localnet_test.dart` — full REAL-EXECUTION integration against a
   self-deployed localnet: matched trades, market/IOC/FOK/post-only orders,
   swaps in both directions, flash loans, cap-based permissions, governance,
@@ -111,7 +130,10 @@ dart format lib/src/contracts
   proxy, TP/SL conditional orders, and liquidation driven by a crashed
   oracle price). Prepare the chain once with `tool/localnet/vendor.sh`, then
   `tool/localnet/setup.sh` per regenesis. These skip automatically when no
-  localnet is configured.
+  localnet is configured. The margin suite currently requires a re-vendored
+  deployment carrying the `_upgraded` modules (the SDK's oracle entrypoints
+  target Pyth's upgraded Core since 0.2.0); until then the margin write path
+  is covered by the byte-compare suites.
 
 ### Web platform
 

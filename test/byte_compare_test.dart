@@ -36,6 +36,9 @@ void main() {
     },
   );
 
+  const vault =
+      '0x00000000000000000000000000000000000000000000000000000000000000ee';
+
   final bm = BalanceManagerContract(config);
   final db = DeepBookContract(config);
   final admin = DeepBookAdminContract(config);
@@ -43,6 +46,8 @@ void main() {
   final gov = GovernanceContract(config);
   final margin = MarginManagerContract(config);
   final proxy = PoolProxyContract(config);
+  final tpsl = MarginTPSLContract(config);
+  final liquidations = MarginLiquidationsContract(config);
 
   final cases = <String, void Function(Transaction tx)>{
     'margin_manager_new': (tx) {
@@ -58,6 +63,19 @@ void main() {
         isBid: false,
       ))(tx);
       proxy.cancelAllOrders('MM')(tx);
+    },
+    // Oracle-taking entrypoints that moved to the upgraded-Pyth modules.
+    'margin_withdraw_borrow': (tx) {
+      margin.withdrawBase('MM', 1)(tx);
+      margin.borrowQuote('MM', 5)(tx);
+      margin.managerState('SUI_DBUSDC', marginManager)(tx);
+    },
+    'margin_liquidation': (tx) {
+      liquidations.liquidateBase(vault, marginManager, 'SUI_DBUSDC')(tx);
+      liquidations.liquidateQuote(vault, marginManager, 'SUI_DBUSDC', 3)(tx);
+    },
+    'tpsl_execute': (tx) {
+      tpsl.executeConditionalOrders(marginManager, 'SUI_DBUSDC', 10)(tx);
     },
     'bm_withdraw': (tx) {
       bm.withdrawFromManager('M', 'SUI', 1.5, address)(tx);

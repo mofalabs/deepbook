@@ -10,8 +10,12 @@ import 'package:sui/sui.dart' show Transaction, TransactionResult;
 
 import '../config.dart';
 import '../contracts/deepbook_margin/pool_proxy.dart' as pool_proxy;
+// Oracle-taking entrypoints live in the parallel `_upgraded` module, which
+// takes Pyth's upgraded-Core `PriceInfoObject`. Entrypoints with no oracle
+// argument stay on the base module, which is the only place they exist.
+import '../contracts/deepbook_margin/pool_proxy_upgraded.dart'
+    as pool_proxy_upgraded;
 import '../conversion.dart';
-import '../errors.dart';
 import '../types.dart';
 
 /// PoolProxyContract class for managing PoolProxy operations.
@@ -48,7 +52,7 @@ class PoolProxyContract {
         final inputPrice = convertPrice(
             price, FLOAT_SCALAR, quoteCoin.scalar, baseCoin.scalar);
         final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-        return pool_proxy.placeLimitOrderV2(
+        return pool_proxy_upgraded.placeLimitOrderV2(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
@@ -56,8 +60,8 @@ class PoolProxyContract {
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'clientOrderId': BigInt.parse(clientOrderId),
             'orderType': orderType.index,
             'selfMatchingOption': selfMatchingOption.index,
@@ -93,7 +97,7 @@ class PoolProxyContract {
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
         final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-        return pool_proxy.placeMarketOrderV2(
+        return pool_proxy_upgraded.placeMarketOrderV2(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
@@ -101,8 +105,8 @@ class PoolProxyContract {
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'clientOrderId': BigInt.parse(clientOrderId),
             'selfMatchingOption': selfMatchingOption.index,
             'quantity': inputQuantity,
@@ -141,7 +145,7 @@ class PoolProxyContract {
         final inputPrice = convertPrice(
             price, FLOAT_SCALAR, quoteCoin.scalar, baseCoin.scalar);
         final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-        return pool_proxy.placeReduceOnlyLimitOrderV2(
+        return pool_proxy_upgraded.placeReduceOnlyLimitOrderV2(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
@@ -149,8 +153,8 @@ class PoolProxyContract {
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'clientOrderId': BigInt.parse(clientOrderId),
             'orderType': orderType.index,
             'selfMatchingOption': selfMatchingOption.index,
@@ -187,7 +191,7 @@ class PoolProxyContract {
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
         final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-        return pool_proxy.placeReduceOnlyMarketOrderV2(
+        return pool_proxy_upgraded.placeReduceOnlyMarketOrderV2(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
@@ -195,8 +199,8 @@ class PoolProxyContract {
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'clientOrderId': BigInt.parse(clientOrderId),
             'selfMatchingOption': selfMatchingOption.index,
             'quantity': inputQuantity,
@@ -234,7 +238,7 @@ class PoolProxyContract {
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
         final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-        return pool_proxy.placeMarketOrderAndRepayLoan(
+        return pool_proxy_upgraded.placeMarketOrderAndRepayLoan(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
@@ -242,8 +246,8 @@ class PoolProxyContract {
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'clientOrderId': BigInt.parse(clientOrderId),
             'selfMatchingOption': selfMatchingOption.index,
             'quantity': inputQuantity,
@@ -283,7 +287,7 @@ class PoolProxyContract {
         final inputPrice = convertPrice(
             price, FLOAT_SCALAR, quoteCoin.scalar, baseCoin.scalar);
         final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-        return pool_proxy.placeReduceOnlyLimitOrderAndRepayLoan(
+        return pool_proxy_upgraded.placeReduceOnlyLimitOrderAndRepayLoan(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
@@ -291,8 +295,8 @@ class PoolProxyContract {
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'clientOrderId': BigInt.parse(clientOrderId),
             'orderType': orderType.index,
             'selfMatchingOption': selfMatchingOption.index,
@@ -331,7 +335,7 @@ class PoolProxyContract {
             final baseMarginPool = _config.getMarginPool(pool.baseCoin);
             final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
             final inputQuantity = convertQuantity(quantity, baseCoin.scalar);
-            return pool_proxy.placeReduceOnlyMarketOrderAndRepayLoan(
+            return pool_proxy_upgraded.placeReduceOnlyMarketOrderAndRepayLoan(
               package: _config.MARGIN_PACKAGE_ID,
               arguments: {
                 'registry': _config.MARGIN_REGISTRY_ID,
@@ -339,8 +343,8 @@ class PoolProxyContract {
                 'pool': pool.address,
                 'baseMarginPool': baseMarginPool.address,
                 'quoteMarginPool': quoteMarginPool.address,
-                'baseOracle': baseCoin.priceInfoObjectId!,
-                'quoteOracle': quoteCoin.priceInfoObjectId!,
+                'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+                'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
                 'clientOrderId': BigInt.parse(clientOrderId),
                 'selfMatchingOption': selfMatchingOption.index,
                 'quantity': inputQuantity,
@@ -595,20 +599,14 @@ class PoolProxyContract {
         final pool = _config.getPool(poolKey);
         final baseCoin = _config.getCoin(pool.baseCoin);
         final quoteCoin = _config.getCoin(pool.quoteCoin);
-        if (baseCoin.priceInfoObjectId == null) {
-          throw DeepBookError('Missing priceInfoObjectId for ${pool.baseCoin}');
-        }
-        if (quoteCoin.priceInfoObjectId == null) {
-          throw DeepBookError(
-              'Missing priceInfoObjectId for ${pool.quoteCoin}');
-        }
-        pool_proxy.updateCurrentPrice(
+        pool_proxy_upgraded.updateCurrentPrice(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'registry': _config.MARGIN_REGISTRY_ID,
             'pool': pool.address,
-            'basePriceInfoObject': baseCoin.priceInfoObjectId,
-            'quotePriceInfoObject': quoteCoin.priceInfoObjectId,
+            'basePriceInfoObject': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quotePriceInfoObject':
+                _config.getPriceInfoObjectId(pool.quoteCoin),
           },
           typeArguments: [baseCoin.type, quoteCoin.type],
         )(tx);

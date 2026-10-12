@@ -1,0 +1,64 @@
+{
+  "decode": [
+    {
+      "id": "984964516523727605930802767292297",
+      "range": {
+        "lowerTick": "123",
+        "higherTick": "1073741823",
+        "quantity": "7770000"
+      },
+      "strikes": {
+        "lower": 1.23,
+        "upper": null
+      }
+    },
+    {
+      "id": "1267650600228229754439935721472",
+      "range": {
+        "lowerTick": "0",
+        "higherTick": "321",
+        "quantity": "10000"
+      },
+      "strikes": {
+        "lower": null,
+        "upper": 3.21
+      }
+    },
+    {
+      "id": "5444517869467364932064334879485981622271",
+      "range": {
+        "lowerTick": "99",
+        "higherTick": "100",
+        "quantity": "42949672950000"
+      },
+      "strikes": {
+        "lower": 0.99,
+        "upper": 1
+      }
+    }
+  ],
+  "binaryTicks": [
+    {
+      "c": {
+        "strikeRaw": "1230000000",
+        "side": "up",
+        "tickSize": "10000000"
+      },
+      "ticks": {
+        "lowerTick": "123",
+        "higherTick": "1073741823"
+      }
+    },
+    {
+      "c": {
+        "strikeRaw": "1230000000",
+        "side": "down",
+        "tickSize": "10000000"
+      },
+      "ticks": {
+        "lowerTick": "0",
+        "higherTick": "123"
+      }
+    }
+  ]
+}

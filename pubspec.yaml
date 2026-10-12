@@ -1,6 +1,6 @@
 name: deepbook
 description: Dart SDK for DeepBook V3, the decentralized central limit order book on Sui. Aligned with the official @mysten/deepbook-v3 TypeScript SDK.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/mofalabs/deepbook
 repository: https://github.com/mofalabs/deepbook
 issue_tracker: https://github.com/mofalabs/deepbook/issues

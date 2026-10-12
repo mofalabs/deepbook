@@ -19,37 +19,40 @@ BcsType<Map<String, dynamic>, dynamic> HotPotatoVector(
     });
 
 MoveCallBuilder destroy(
-    {String? package, List<String> typeArguments = const []}) {
+    {required List<dynamic> arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::hot_potato_vector::destroy',
         typeArguments: typeArguments,
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
 MoveCallBuilder length(
-    {String? package, List<String> typeArguments = const []}) {
+    {required List<dynamic> arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::hot_potato_vector::length',
         typeArguments: typeArguments,
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
 MoveCallBuilder isEmpty(
-    {String? package, List<String> typeArguments = const []}) {
+    {required List<dynamic> arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::hot_potato_vector::is_empty',
         typeArguments: typeArguments,
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }

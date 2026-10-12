@@ -16,23 +16,21 @@ final PriceStatus = Bcs.struct('${$moduleName}::PriceStatus', {
   'status': SuiBcs.U64,
 });
 
-MoveCallBuilder fromU64({String? package}) {
+MoveCallBuilder fromU64({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_status::from_u64',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, ['u64'], []),
+        arguments: normalizeMoveArguments(tx, arguments, ['u64'], []),
       );
 }
 
-MoveCallBuilder getStatus({String? package}) {
+MoveCallBuilder getStatus({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_status::get_status',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 

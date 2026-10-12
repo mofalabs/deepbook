@@ -10,6 +10,11 @@ import 'package:sui/sui.dart' show Transaction, TransactionResult;
 
 import '../config.dart';
 import '../contracts/deepbook_margin/margin_manager.dart' as margin_manager;
+// Oracle-taking entrypoints live in the parallel `_upgraded` module, which
+// takes Pyth's upgraded-Core `PriceInfoObject`. Entrypoints with no oracle
+// argument stay on the base module, which is the only place they exist.
+import '../contracts/deepbook_margin/margin_manager_upgraded.dart'
+    as margin_manager_upgraded;
 import '../contracts/deepbook_margin/tpsl.dart' as tpsl;
 import '../conversion.dart';
 import '../types.dart';
@@ -136,13 +141,14 @@ class MarginTPSLContract {
             : newPendingMarketOrder(
                 manager.poolKey, pendingOrder as PendingMarketOrderParams)(tx);
 
-        margin_manager.addConditionalOrder(
+        margin_manager_upgraded.addConditionalOrder(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': manager.address,
             'pool': pool.address,
-            'basePriceInfoObject': baseCoin.priceInfoObjectId!,
-            'quotePriceInfoObject': quoteCoin.priceInfoObjectId!,
+            'basePriceInfoObject': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quotePriceInfoObject':
+                _config.getPriceInfoObjectId(pool.quoteCoin),
             'registry': _config.MARGIN_REGISTRY_ID,
             'conditionalOrderId': BigInt.parse(conditionalOrderId),
             'condition': condition,
@@ -204,15 +210,16 @@ class MarginTPSLContract {
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.executeConditionalOrdersV2(
+        return margin_manager_upgraded.executeConditionalOrdersV2(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': managerAddress,
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'basePriceInfoObject': baseCoin.priceInfoObjectId!,
-            'quotePriceInfoObject': quoteCoin.priceInfoObjectId!,
+            'basePriceInfoObject': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quotePriceInfoObject':
+                _config.getPriceInfoObjectId(pool.quoteCoin),
             'registry': _config.MARGIN_REGISTRY_ID,
             'maxOrdersToExecute': maxOrdersToExecute,
           },
@@ -242,15 +249,16 @@ class MarginTPSLContract {
         final quoteCoin = _config.getCoin(pool.quoteCoin);
         final baseMarginPool = _config.getMarginPool(pool.baseCoin);
         final quoteMarginPool = _config.getMarginPool(pool.quoteCoin);
-        return margin_manager.executeConditionalOrdersV3(
+        return margin_manager_upgraded.executeConditionalOrdersV3(
           package: _config.MARGIN_PACKAGE_ID,
           arguments: {
             'self': managerAddress,
             'pool': pool.address,
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
-            'basePriceInfoObject': baseCoin.priceInfoObjectId!,
-            'quotePriceInfoObject': quoteCoin.priceInfoObjectId!,
+            'basePriceInfoObject': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quotePriceInfoObject':
+                _config.getPriceInfoObjectId(pool.quoteCoin),
             'registry': _config.MARGIN_REGISTRY_ID,
             'maxOrdersToExecute': maxOrdersToExecute,
           },

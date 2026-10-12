@@ -9,22 +9,24 @@ import 'package:sui/bcs/sui_bcs.dart';
 import 'package:sui/sui.dart' show Transaction;
 import '../utils.dart';
 
-MoveCallBuilder isProofValid({String? package}) {
+MoveCallBuilder isProofValid(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::merkle_tree::is_proof_valid',
         arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null, 'vector<u8>'], []),
+            tx, arguments, [null, null, 'vector<u8>'], []),
       );
 }
 
-MoveCallBuilder constructProofs({String? package}) {
+MoveCallBuilder constructProofs(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::merkle_tree::construct_proofs',
         arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['vector<vector<u8>>', 'u8'], []),
+            tx, arguments, ['vector<vector<u8>>', 'u8'], []),
       );
 }

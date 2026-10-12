@@ -120,7 +120,8 @@ final WithdrawCollateralEvent =
 /// _limit_ pending order is intentionally transient — when it triggers, the resting
 /// order it places is clamped to `max_order_ttl_ms` (default 3 days) by
 /// `clamp_expire_timestamp`, the same stale-price guard as any margin limit order.
-/// For a permanent stop, use a market pending order.
+/// For a permanent stop, use a market pending order. Twin:
+/// `margin_manager_upgraded::add_conditional_order`. Edit both.
 MoveCallBuilder addConditionalOrder(
     {required dynamic arguments,
     String? package,
@@ -220,7 +221,8 @@ MoveCallBuilder executeConditionalOrders(
 /// v2 adds `base_margin_pool` + `quote_margin_pool` parameters and enforces a
 /// post-fill `risk_ratio >= min_borrow_risk_ratio` invariant inside the inner loop.
 /// If any single triggered fill would breach that floor, the entire txn aborts — no
-/// partial-state landing.
+/// partial-state landing. Twin:
+/// `margin_manager_upgraded::execute_conditional_orders_v2`. Edit both.
 MoveCallBuilder executeConditionalOrdersV2(
     {required dynamic arguments,
     String? package,
@@ -261,7 +263,8 @@ MoveCallBuilder executeConditionalOrdersV2(
 /// This is what lets a stop-loss fire in the `liquidation..min_borrow` danger band:
 /// a swap alone only lowers the oracle-valued ratio (so the v2 borrow-floor gate
 /// rejects it), while repaying actually improves it. If a single triggered fill
-/// would worsen net solvency the whole txn aborts — no partial-state landing.
+/// would worsen net solvency the whole txn aborts — no partial-state landing. Twin:
+/// `margin_manager_upgraded::execute_conditional_orders_v3`. Edit both.
 MoveCallBuilder executeConditionalOrdersV3(
     {required dynamic arguments,
     String? package,
@@ -398,8 +401,39 @@ MoveCallBuilder unsetMarginManagerReferral(
       );
 }
 
+/// Superseded by `set_margin_manager_referral`, which takes a pool-scoped
+/// `DeepBookPoolReferral`. Retained as an aborting stub because it is public in the
+/// deployed package: a `compatible` upgrade cannot drop a public function.
+MoveCallBuilder setReferral(
+    {required dynamic arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
+  final packageAddress = package ?? '@deepbook/margin';
+  return (tx) => tx.moveCall(
+        '$packageAddress::margin_manager::set_referral',
+        typeArguments: typeArguments,
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, null], ['Self', 'ReferralCap']),
+      );
+}
+
+/// Superseded by `unset_margin_manager_referral`, which is pool-scoped. Retained as
+/// an aborting stub for the same reason as `set_referral`.
+MoveCallBuilder unsetReferral(
+    {required dynamic arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
+  final packageAddress = package ?? '@deepbook/margin';
+  return (tx) => tx.moveCall(
+        '$packageAddress::margin_manager::unset_referral',
+        typeArguments: typeArguments,
+        arguments: normalizeMoveArguments(tx, arguments, [null], ['Self']),
+      );
+}
+
 /// Deposit a coin into the margin manager. The coin must be of the same type as
-/// either the base, quote, or DEEP.
+/// either the base, quote, or DEEP. Twin: `margin_manager_upgraded::deposit`. Edit
+/// both.
 MoveCallBuilder deposit(
     {required dynamic arguments,
     String? package,
@@ -418,7 +452,8 @@ MoveCallBuilder deposit(
 
 /// Withdraw a specified amount of an asset from the margin manager. The asset must
 /// be of the same type as either the base, quote, or DEEP. The withdrawal is
-/// subject to the risk ratio limit.
+/// subject to the risk ratio limit. Twin: `margin_manager_upgraded::withdraw`. Edit
+/// both.
 MoveCallBuilder withdraw(
     {required dynamic arguments,
     String? package,
@@ -450,7 +485,8 @@ MoveCallBuilder withdraw(
       );
 }
 
-/// Borrow the base asset using the margin manager.
+/// Borrow the base asset using the margin manager. Twin:
+/// `margin_manager_upgraded::borrow_base`. Edit both.
 MoveCallBuilder borrowBase(
     {required dynamic arguments,
     String? package,
@@ -480,7 +516,8 @@ MoveCallBuilder borrowBase(
       );
 }
 
-/// Borrow the quote asset using the margin manager.
+/// Borrow the quote asset using the margin manager. Twin:
+/// `margin_manager_upgraded::borrow_quote`. Edit both.
 MoveCallBuilder borrowQuote(
     {required dynamic arguments,
     String? package,
@@ -546,6 +583,7 @@ MoveCallBuilder repayQuote(
       );
 }
 
+/// Twin: `margin_manager_upgraded::liquidate`. Edit both.
 MoveCallBuilder liquidate(
     {required dynamic arguments,
     String? package,
@@ -575,6 +613,7 @@ MoveCallBuilder liquidate(
       );
 }
 
+/// Twin: `margin_manager_upgraded::risk_ratio`. Edit both.
 MoveCallBuilder riskRatio(
     {required dynamic arguments,
     String? package,
@@ -604,8 +643,10 @@ MoveCallBuilder riskRatio(
       );
 }
 
-/// Returns the risk ratio without validating oracle price staleness or confidence.
-/// Use for read-only queries where stale prices are acceptable.
+/// Returns the risk ratio without validating staleness, EWMA divergence or
+/// confidence - only the feed id is checked. Use for read-only queries where stale
+/// prices are acceptable. Twin: `margin_manager_upgraded::risk_ratio_unsafe`. Edit
+/// both.
 MoveCallBuilder riskRatioUnsafe(
     {required dynamic arguments,
     String? package,
@@ -714,7 +755,8 @@ MoveCallBuilder calculateDebts(
 /// (manager_id, deepbook_pool_id, risk_ratio, base_asset, quote_asset, base_debt,
 /// quote_debt, base_pyth_price, base_pyth_decimals, quote_pyth_price,
 /// quote_pyth_decimals, current_price, lowest_trigger_above_price,
-/// highest_trigger_below_price)
+/// highest_trigger_below_price) Twin: `margin_manager_upgraded::manager_state`.
+/// Edit both.
 MoveCallBuilder managerState(
     {required dynamic arguments,
     String? package,
@@ -734,6 +776,39 @@ MoveCallBuilder managerState(
           '0x2::clock::Clock'
         ], [
           'self',
+          'registry',
+          'baseOracle',
+          'quoteOracle',
+          'pool',
+          'baseMarginPool',
+          'quoteMarginPool'
+        ]),
+      );
+}
+
+/// Returns comprehensive state information for multiple margin managers. Same as
+/// manager_state but takes a vector and returns vectors of all values. All managers
+/// must be of the same type. Twin: `margin_manager_upgraded::manager_states`. Edit
+/// both.
+MoveCallBuilder managerStates(
+    {required dynamic arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
+  final packageAddress = package ?? '@deepbook/margin';
+  return (tx) => tx.moveCall(
+        '$packageAddress::margin_manager::manager_states',
+        typeArguments: typeArguments,
+        arguments: normalizeMoveArguments(tx, arguments, [
+          'vector<null>',
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          '0x2::clock::Clock'
+        ], [
+          'marginManagers',
           'registry',
           'baseOracle',
           'quoteOracle',

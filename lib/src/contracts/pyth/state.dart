@@ -36,83 +36,83 @@ final CurrentDigest = Bcs.struct('${$moduleName}::CurrentDigest', {
   'dummy_field': SuiBcs.BOOL,
 });
 
-MoveCallBuilder getStalePriceThresholdSecs({String? package}) {
+MoveCallBuilder getStalePriceThresholdSecs(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::get_stale_price_threshold_secs',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getBaseUpdateFee({String? package}) {
+MoveCallBuilder getBaseUpdateFee(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::get_base_update_fee',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getFeeRecipient({String? package}) {
+MoveCallBuilder getFeeRecipient(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::get_fee_recipient',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder isValidDataSource({String? package}) {
+MoveCallBuilder isValidDataSource(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::is_valid_data_source',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }
 
-MoveCallBuilder isValidGovernanceDataSource({String? package}) {
+MoveCallBuilder isValidGovernanceDataSource(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::is_valid_governance_data_source',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }
 
-MoveCallBuilder priceFeedObjectExists({String? package}) {
+MoveCallBuilder priceFeedObjectExists(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::price_feed_object_exists',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }
 
-MoveCallBuilder governanceDataSource({String? package}) {
+MoveCallBuilder governanceDataSource(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::governance_data_source',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getLastExecutedGovernanceSequence({String? package}) {
+MoveCallBuilder getLastExecutedGovernanceSequence(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::get_last_executed_governance_sequence',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
@@ -124,32 +124,33 @@ MoveCallBuilder governanceModule({String? package}) {
       );
 }
 
-MoveCallBuilder governanceChain({String? package}) {
+MoveCallBuilder governanceChain(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::governance_chain',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder governanceContract({String? package}) {
+MoveCallBuilder governanceContract(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::governance_contract',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getPriceInfoObjectId({String? package}) {
+MoveCallBuilder getPriceInfoObjectId(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::state::get_price_info_object_id',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, 'vector<u8>'], []),
+        arguments:
+            normalizeMoveArguments(tx, arguments, [null, 'vector<u8>'], []),
       );
 }

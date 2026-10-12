@@ -16,22 +16,21 @@ final PriceIdentifier = Bcs.struct('${$moduleName}::PriceIdentifier', {
   'bytes': Bcs.vector(SuiBcs.U8),
 });
 
-MoveCallBuilder fromByteVec({String? package}) {
+MoveCallBuilder fromByteVec(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_identifier::from_byte_vec',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['vector<u8>'], []),
+        arguments: normalizeMoveArguments(tx, arguments, ['vector<u8>'], []),
       );
 }
 
-MoveCallBuilder getBytes({String? package}) {
+MoveCallBuilder getBytes({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_identifier::get_bytes',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }

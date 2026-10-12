@@ -1,6 +1,9 @@
 /// Per-network package ids, coin maps, pool maps and Pyth configs — a
 /// faithful snapshot of the official SDK's `utils/constants.ts`
-/// (@mysten/deepbook-v3 v1.6.2).
+/// (@mysten/deepbook-v3 v2.6.8).
+///
+/// Feed ids and price objects are those of Pyth's upgraded Core, the only
+/// deployment this SDK targets.
 library;
 
 import 'types.dart';
@@ -22,14 +25,18 @@ const testnetPackageIds = DeepbookPackageIds(
       '0x7c256edbda983a2cd6f946655f4bf3f00a41043993781f8674a7046e8c0e11d1',
   deepTreasuryId:
       '0x69fffdae0075f8f71f4fa793549c11079266910e8905169845af1f5d00e09dcb',
+  // deepbook_margin v16 — the first testnet package carrying the
+  // upgraded-Pyth modules.
   marginPackageId:
-      '0xe52c1dece2bb5d5645689d6da8b8debe8347e3446011704a4fcb386746876580',
+      '0xce6ab6290458f597fc078793335f4b1d98479f29ebc02198ae960e9401d0c72f',
   marginV1:
       '0xb8620c24c9ea1a4a41e79613d2b3d1d93648d1bb6f6b789a7c8f261c94110e4b',
   marginRegistryId:
       '0x48d7640dfae2c6e9ceeada197a7a1643984b5a24c55a0c6c023dac77e0339f75',
+  // margin_liquidation v4 — carries liquidate_base_upgraded /
+  // liquidate_quote_upgraded.
   liquidationPackageId:
-      '0x8d69c3ef3ef580e5bf87b933ce28de19a5d0323588d1a44b9c60b4001741aa24',
+      '0x29bccec5261b7d040555a13e98bbc6bef7bad007d62759aac8b71c19916f6476',
 );
 
 /// DeepBook package and shared object ids on mainnet.
@@ -40,14 +47,19 @@ const mainnetPackageIds = DeepbookPackageIds(
       '0xaf16199a2dff736e9f07a845f23c5da6df6f756eddb631aed9d24a93efc4549d',
   deepTreasuryId:
       '0x032abf8948dda67a271bcc18e776dbbcfb0d58c8d288a700ff0d5521e57a1ffe',
+  // deepbook_margin v7 — the first mainnet package carrying the upgraded-Pyth
+  // modules. Its gate constant is `MARGIN_VERSION = 7`, and every entrypoint
+  // asserts the registry allows that version, so this id only works once
+  // `enable_version(7)` has run on the mainnet MarginRegistry. Until then v7
+  // flows abort `EPackageVersionDisabled`.
   marginPackageId:
-      '0x8af25e44bcdfb8b19ceffef5a1bd457a89a4270b8237e1025f30cd26acb4edbe',
+      '0x55ee8099674e46266df2bf0ffed9569e1511aa269f2a9b8c63a2c72f16404e72',
   marginV1:
       '0x97d9473771b01f77b0940c589484184b49f6444627ec121314fae6a6d36fb86b',
   marginRegistryId:
       '0x0e40998b359a9ccbab22a98ed21bd4346abf19158bc7980c8291908086b3a742',
   liquidationPackageId:
-      '0xf17bff1bf21e9587acc5708714e520aa967f82f256f626938a33c4109b08adb9',
+      '0xba2b39c026650fef52038c93c526fc5314a4286318a0d2a7054b65815178fb74',
 );
 
 /// Coins known to the SDK on testnet, keyed by coin key.
@@ -58,12 +70,11 @@ const CoinMap testnetCoins = {
     type:
         '0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::deep::DEEP',
     scalar: 1000000,
-    // DEEP uses HFT feed on testnet
-    feed: '0x99137a18354efa7fb6840889d059fdb04c46a6ce21be97ab60d9ad93e91ac758',
+    feed: '0x29bdd5248234e33bd93d3b81100b5fa32eaa5997843847e2c2cb16d7c6d9f7ff',
     currencyId:
         '0xbf1b77e244f649c736a44898585cc8ac939fbb0bbdf1d8d2a183978cc312e613',
     priceInfoObjectId:
-        '0x3d52fffa2cd9e54b39bb36d282bdda560b15b8b4fdf4766a3c58499ef172bafc',
+        '0x27882b43c2cc62bbd8fb5f4ebc20be004b14454b2c98755033f5446d35474339',
   ),
   'SUI': Coin(
     address:
@@ -71,11 +82,11 @@ const CoinMap testnetCoins = {
     type:
         '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI',
     scalar: 1000000000,
-    feed: '0x50c67b3fd225db8912a424dd4baed60ffdde625ed2feaaf283724f9608fea266',
+    feed: '0x23d7315113f5b1d3ba7a83604c44b94d79f4fd69af77f804fc7f920a6dc65744',
     currencyId:
         '0xf256d3fb6a50eaa748d94335b34f2982fbc3b63ceec78cafaa29ebc9ebaf2bbc',
     priceInfoObjectId:
-        '0x1ebb295c789cc42b3b2a1606482cd1c7124076a0f5676718501fda8c7fd075a0',
+        '0x867877562b5d8ac262d93b02062e04b428a2f9bfbb2f05b8af52e04cd98bd241',
   ),
   'DBUSDC': Coin(
     address:
@@ -83,11 +94,11 @@ const CoinMap testnetCoins = {
     type:
         '0xf7152c05930480cd740d7311b5b8b45c6f488e3a53a11c3f74a6fac36a52e0d7::DBUSDC::DBUSDC',
     scalar: 1000000,
-    feed: '0x41f3625971ca2ed2263e78573fe5ce23e13d2558ed3f2e47ab0f84fb9e7ae722',
+    feed: '0xeaa020c61cc479712813461ce153894a96a6c00b21ed0cfc2798d1f9a9e9c94a',
     currencyId:
         '0x509db0f9283c9ee4fdc5b99028a439d3639f49e9709e3d7a6de14b3bfdb0c784',
     priceInfoObjectId:
-        '0x9c4dd4008297ffa5e480684b8100ec21cc934405ed9a25d4e4d7b6259aad9c81',
+        '0x17de8d80e8efedfd1053c46fb921e51824479ed32c6aded5f7279995bb84db05',
   ),
   'DBTC': Coin(
     address:
@@ -95,11 +106,15 @@ const CoinMap testnetCoins = {
     type:
         '0x6502dae813dbe5e42643c119a6450a518481f03063febc7e20238e43b6ea9e86::dbtc::DBTC',
     scalar: 100000000,
-    feed: '0xf9c0172ba10dfa4d19088d94f5bf61d3b54d5bd7483a322a982e1373ee8ea31b',
+    // Crypto.XBTC/USD — DBTC is testnet's wrapped BTC, so it takes the same
+    // feed mainnet XBTC does. Never plain BTC/USD: that is a different asset,
+    // and standing it in would misprice DBTC collateral whenever XBTC's peg
+    // moves. Object created on upgraded testnet Core 2026-08-11.
+    feed: '0xae8f269ed9c4bed616c99a98cf6dfe562bd3202e7f91821a471ff854713851b4',
     currencyId:
         '0x3ef2afa2126704bf721b9c8495d94288f6bd090fc454fe3e1613eb765a8a348f',
     priceInfoObjectId:
-        '0x72431a238277695d3f31e4425225a4462674ee6cceeea9d66447b210755fffba',
+        '0x88387b85b9a53c4365219aee4d77e62213877f110eb859d8e03812a5bea0d1f7',
   ),
   'DBUSDT': Coin(
     address:
@@ -129,7 +144,7 @@ const CoinMap mainnetCoins = {
     currencyId:
         '0x3f2afb7c5f245870a8b8a3808e6dd7042446a0e7504e9d2795372da053858cd9',
     priceInfoObjectId:
-        '0x8c7f3a322b94cc69db2a2ac575cbd94bf5766113324c3a3eceac91e3e88a51ed',
+        '0x562957f70afaf8a0870e2959abc3e3f327a8159f803d8c56cff27ac2df260477',
   ),
   'SUI': Coin(
     address:
@@ -141,7 +156,7 @@ const CoinMap mainnetCoins = {
     currencyId:
         '0xf256d3fb6a50eaa748d94335b34f2982fbc3b63ceec78cafaa29ebc9ebaf2bbc',
     priceInfoObjectId:
-        '0x801dbc2f0053d34734814b2d6df491ce7807a725fe9a01ad74a07e9c51396c37',
+        '0x89b2add829cb6fcd017153fff428bc9faec4d06d643ecfc435af5b55a9e987f0',
   ),
   'USDC': Coin(
     address:
@@ -153,7 +168,7 @@ const CoinMap mainnetCoins = {
     currencyId:
         '0x75cfbbf8c962d542e99a1d15731e6069f60a00db895407785b15d14f606f2b4a',
     priceInfoObjectId:
-        '0x5dec622733a204ca27f5a90d8c2fad453cc6665186fd5dff13a83d0b6c9027ab',
+        '0x6ddfc6f9921e55998cbc2e68f78eba897981d79ac17f66c5277bc38954a2a3f8',
   ),
   'WAL': Coin(
     address:
@@ -165,7 +180,7 @@ const CoinMap mainnetCoins = {
     currencyId:
         '0xb6a0c0bacb1c87c3be4dff20c22ef1012125b5724b5b0ff424f852a2651b23fa',
     priceInfoObjectId:
-        '0xeb7e669f74d976c0b99b6ef9801e3a77716a95f1a15754e0f1399ce3fb60973d',
+        '0xdbea8600eeeb0399df58c28e73b8201ae880a954813131d33bfa6902ccdadd24',
   ),
   'SUIUSDE': Coin(
     address:
@@ -177,7 +192,7 @@ const CoinMap mainnetCoins = {
     currencyId:
         '0x44f0959110bd9e5e91af0483364c42075ac19f173b28f708989f419ef3560576',
     priceInfoObjectId:
-        '0x9b2028bfc829127d2e5ead1691dc3002de9e9b8d8076b4915e5ecc7d9b99d63f',
+        '0xa8023b552578bd5036be60d3132306882469d1871cb4bec3099c47dece08c4cd',
   ),
   'XBTC': Coin(
     address:
@@ -185,11 +200,17 @@ const CoinMap mainnetCoins = {
     type:
         '0x876a4b7bce8aeaef60464c11f4026903e9afacab79b9b142686158aa86560b50::xbtc::XBTC',
     scalar: 100000000,
+    // Crypto.XBTC/USD, always. XBTC must never be priced off Crypto.BTC/USD:
+    // it is a distinct asset carrying its own peg and redemption risk, so a
+    // BTC substitute misstates collateral precisely when the two diverge.
     feed: '0xae8f269ed9c4bed616c99a98cf6dfe562bd3202e7f91821a471ff854713851b4',
     currencyId:
         '0x907bb173bffab7c57bbd3350a633aa32c8770937b496d7d88874087b59200bcc',
+    // Created 2026-08-17 — XBTC is absent from Pyth's Sui push-feed list, so
+    // this object is kept fresh by DeepBook's own price pusher, as on legacy
+    // Core.
     priceInfoObjectId:
-        '0xa4b9db1866ee6e2a156e8c36fc66be0f68f232388ebb578c949c2c6beb50128b',
+        '0x4f7ff4518b4cf33b162d76e70632d8f0a6e04441a058a138959d7a2384cffe60',
   ),
   'USDSUI': Coin(
     address:
@@ -197,11 +218,15 @@ const CoinMap mainnetCoins = {
     type:
         '0x44f838219cf67b058f3b37907b655f226153c18e33dfcd0da559a844fea9b1c1::usdsui::USDSUI',
     scalar: 1000000,
+    // Valid Pyth data, but margin cannot price USDSUI: the mainnet
+    // MarginRegistry's PythConfig configures six currencies and USDSUI is not
+    // among them, so an oracle-taking call aborts in the registry's currency
+    // lookup before the feed id is ever compared. Lending is unaffected.
     feed: '0xd510fcdb3a63f35d3bb118d5db3afc5815a3f13bc55d48abb893b63f0315902a',
     currencyId:
         '0x535e826a2acddab687c81cb6c6166553b479f61a9023800ec0020baba8d94731',
     priceInfoObjectId:
-        '0x68644a3ab7a1aab113a4a68b6115a5b51eba4cb6aaac2d99b734be2e5e748425',
+        '0x6896ccc8c08a84e47f0ab8affbd3fce2623a72c76f9092e59f8f6ece450119cd',
   ),
   'WUSDC': Coin(
     address:
@@ -571,18 +596,33 @@ const MarginPoolMap mainnetMarginPools = {
   ),
 };
 
-/// Pyth and Wormhole state object ids on testnet.
+/// Pyth (upgraded Core) and Wormhole state object ids on testnet.
 const testnetPythConfigs = PythConfig(
   pythStateId:
-      '0x243759059f4c3111179da5878c12f68d612c21a8d54d85edc86164bb18be1c7c',
+      '0x3c48fe392912de6c18087a2b3f5fdbfbfdb4598e180947feff1f12f8e9ea073e',
   wormholeStateId:
-      '0x31358d198147da50db32eda2562951d53973a0c0ad5ed738e9b17d88b213d790',
+      '0x750da8e6d16b6a363a39fe2eaa8295ac224a1e6fce4e47b58845e2e8746164f0',
 );
 
-/// Pyth and Wormhole state object ids on mainnet.
+/// Pyth (upgraded Core) and Wormhole state object ids on mainnet.
 const mainnetPythConfigs = PythConfig(
   pythStateId:
-      '0x1f9310238ee9298fb703c3419030b35b22bb1cc37113e3bb5007c99aec79e5b8',
+      '0x03719fae774ddab3cfcaa53bbc046f0cbe21410019b6280811bf3f9f4b05839d',
   wormholeStateId:
-      '0xaeab97f96cf9877fee2883315d459552b2b921edc16d7ceac6eab944dd88919c',
+      '0xdbca52b9fb4f712e25f61f974586d93ac541bcf8389564f0323bb07215168b5c',
 );
+
+/// Hermes serving Pyth's upgraded Core. Requires an
+/// `Authorization: Bearer <token>` header and answers 401 without one.
+const PYTH_UPGRADED_HERMES = 'https://pyth.dourolabs.app/hermes';
+
+/// DeepBook-operated Hermes proxy: forwards to [PYTH_UPGRADED_HERMES]
+/// supplying credentials server-side. Used only when no `accessToken` is
+/// configured.
+///
+/// `null` until the proxy is deployed. It must stay `null` rather than a
+/// placeholder URL: it is the default endpoint whenever a consumer supplies
+/// no credentials, so a non-resolving value here surfaces as an opaque DNS
+/// error from inside dio instead of a configuration error naming the field
+/// to set.
+const String? DEEPBOOK_HERMES_PROXY = null;

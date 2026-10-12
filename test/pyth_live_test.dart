@@ -1,12 +1,22 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sui/sui.dart';
 import 'package:deepbook/deepbook.dart';
 
-/// Live tests for the Pyth layer (M9): Hermes beta REST + testnet on-chain
-/// Pyth/Wormhole state, plus a full simulated price-feed update.
+/// Live tests for the Pyth layer: Hermes v2 REST + testnet on-chain
+/// Pyth/Wormhole state (upgraded Core), plus a full simulated price-feed
+/// update.
 ///
-/// Run with: flutter test test/pyth_live_test.dart
+/// The Hermes serving the upgraded Core answers 401 unauthenticated, so the
+/// Hermes-dependent tests need a token:
+///   PYTH_ACCESS_TOKEN=... flutter test test/pyth_live_test.dart
+/// They skip when it is absent; the on-chain-state tests always run.
 void main() {
+  final accessToken = Platform.environment['PYTH_ACCESS_TOKEN'];
+  final noToken = accessToken == null || accessToken.isEmpty;
+  const needsToken =
+      'Needs PYTH_ACCESS_TOKEN: upgraded-Core Hermes answers 401 without it.';
   final client = SuiGrpcClient(network: SuiNetwork.testnet);
   final core = client.core as GrpcCoreClient;
   const address =
@@ -20,15 +30,15 @@ void main() {
   );
 
   test('Hermes returns accumulator update data for testnet feeds', () async {
-    final connection =
-        SuiPriceServiceConnection(hermesEndpoint(config.network));
-    final feed = config.getCoin('SUI').feed!;
+    final connection = SuiPriceServiceConnection(PYTH_UPGRADED_HERMES,
+        accessToken: accessToken);
+    final feed = config.getFeedId('SUI');
     final updates = await connection.getPriceFeedsUpdateData([feed]);
     expect(updates, hasLength(1));
     expect(updates.first.length, greaterThan(100));
     // Accumulator magic "PNAU".
     expect(updates.first.sublist(0, 4), [0x50, 0x4e, 0x41, 0x55]);
-  });
+  }, skip: noToken ? needsToken : false);
 
   test('package ids and price table resolve from on-chain state', () async {
     final pythPackage = await pythClient.getPythPackageId();
@@ -61,9 +71,9 @@ void main() {
         core: core,
         config: DeepBookConfig(network: 'testnet', address: funded));
 
-    final connection =
-        SuiPriceServiceConnection(hermesEndpoint(config.network));
-    final feed = config.getCoin('SUI').feed!;
+    final connection = SuiPriceServiceConnection(PYTH_UPGRADED_HERMES,
+        accessToken: accessToken);
+    final feed = config.getFeedId('SUI');
     final updates = await connection.getPriceFeedsUpdateData([feed]);
 
     final tx = Transaction();
@@ -73,5 +83,7 @@ void main() {
 
     final results = await ctx.simulate(tx);
     expect(results, isNotEmpty);
-  }, timeout: const Timeout(Duration(minutes: 2)));
+  },
+      timeout: const Timeout(Duration(minutes: 2)),
+      skip: noToken ? needsToken : false);
 }

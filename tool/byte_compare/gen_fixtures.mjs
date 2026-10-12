@@ -4,11 +4,16 @@
 // (test/byte_compare_test.dart) rebuilds the same transaction with the Dart
 // SDK and compares the normalized command/input structure.
 //
-// Run from the ts-sdks workspace so bare imports resolve:
+// ESM resolves bare imports from the script's own location, so copy this
+// file into the package before running (and build the workspace first:
+// packages/{utils,bcs,sui,deepbook-v3} each `pnpm run build`, in that order):
 //   cd <ts-sdks>/packages/deepbook-v3
-//   node <this-repo>/deepbook/tool/byte_compare/gen_fixtures.mjs <out-dir>
+//   cp <this-file> gen_fixtures_tmp.mjs
+//   node gen_fixtures_tmp.mjs <this-repo>/deepbook/test/fixtures/byte_compare
+//   rm gen_fixtures_tmp.mjs
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { Transaction } from '@mysten/sui/transactions';
 import {
   DeepBookConfig,
@@ -18,8 +23,17 @@ import {
   FlashLoanContract,
   GovernanceContract,
   MarginManagerContract,
+  MarginTPSLContract,
   PoolProxyContract,
 } from '@mysten/deepbook-v3';
+
+// Not exported from the package root; load it from the built output of the
+// workspace this script runs in (cwd = packages/deepbook-v3).
+const { MarginLiquidationsContract } = await import(
+  pathToFileURL(
+    join(process.cwd(), 'dist/transactions/marginLiquidations.mjs'),
+  ).href
+);
 
 const outDir = process.argv[2] ?? 'fixtures';
 mkdirSync(outDir, { recursive: true });
@@ -49,6 +63,11 @@ const gov = new GovernanceContract(config);
 
 const marginManager = new MarginManagerContract(config);
 const poolProxy = new PoolProxyContract(config);
+const marginTPSL = new MarginTPSLContract(config);
+const marginLiquidations = new MarginLiquidationsContract(config);
+
+const VAULT =
+  '0x00000000000000000000000000000000000000000000000000000000000000ee';
 
 const cases = {
   margin_manager_new: (tx) => {
@@ -66,6 +85,19 @@ const cases = {
       }),
     );
     tx.add(poolProxy.cancelAllOrders('MM'));
+  },
+  // Oracle-taking entrypoints that moved to the upgraded-Pyth modules.
+  margin_withdraw_borrow: (tx) => {
+    tx.add(marginManager.withdrawBase('MM', 1));
+    tx.add(marginManager.borrowQuote('MM', 5));
+    tx.add(marginManager.managerState('SUI_DBUSDC', MARGIN_MANAGER));
+  },
+  margin_liquidation: (tx) => {
+    tx.add(marginLiquidations.liquidateBase(VAULT, MARGIN_MANAGER, 'SUI_DBUSDC'));
+    tx.add(marginLiquidations.liquidateQuote(VAULT, MARGIN_MANAGER, 'SUI_DBUSDC', 3));
+  },
+  tpsl_execute: (tx) => {
+    tx.add(marginTPSL.executeConditionalOrders(MARGIN_MANAGER, 'SUI_DBUSDC', 10));
   },
   bm_withdraw: (tx) => {
     tx.add(bm.withdrawFromManager('M', 'SUI', 1.5, ADDRESS));

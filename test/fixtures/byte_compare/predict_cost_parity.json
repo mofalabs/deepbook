@@ -1,0 +1,1391 @@
+{
+  "mint": {
+    "up_plain": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "quantity": 100
+      },
+      "result": {
+        "ok": {
+          "quantity": 100,
+          "entryProbability": 0.65,
+          "premium": 65,
+          "fees": {
+            "trading": 4.769696,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 69.769696,
+          "costPerContract": 0.69769696,
+          "payoutMultiple": 1.4332870247850873,
+          "raw": {
+            "quantity": "100000000",
+            "entryProbability": "650000000",
+            "premium": "65000000",
+            "tradingFee": "4769696",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "69769696"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "up_builder_penalty_subsidy": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "quantity": 100,
+        "builderCode": true,
+        "feeIncentiveBalance": 0.5,
+        "penaltyRate": "2000000"
+      },
+      "result": {
+        "ok": {
+          "quantity": 100,
+          "entryProbability": 0.65,
+          "premium": 65,
+          "fees": {
+            "trading": 4.769696,
+            "subsidy": 0.5,
+            "builder": 0.476969,
+            "penalty": 0.2,
+            "impact": 0
+          },
+          "cost": 69.946665,
+          "costPerContract": 0.69946665,
+          "payoutMultiple": 1.429660727927486,
+          "raw": {
+            "quantity": "100000000",
+            "entryProbability": "650000000",
+            "premium": "65000000",
+            "tradingFee": "4769696",
+            "subsidy": "500000",
+            "builderFee": "476969",
+            "penaltyFee": "200000",
+            "impactCharge": "0",
+            "cost": "69946665"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "up_subsidy_rate_bound": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "quantity": 100,
+        "feeIncentiveBalance": "1000000000000"
+      },
+      "result": {
+        "ok": {
+          "quantity": 100,
+          "entryProbability": 0.65,
+          "premium": 65,
+          "fees": {
+            "trading": 4.769696,
+            "subsidy": 0.953939,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 68.815757,
+          "costPerContract": 0.68815757,
+          "payoutMultiple": 1.4531555614508462,
+          "raw": {
+            "quantity": "100000000",
+            "entryProbability": "650000000",
+            "premium": "65000000",
+            "tradingFee": "4769696",
+            "subsidy": "953939",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "68815757"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "down_raw_quantity": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": null,
+          "higherUp": "600000000"
+        },
+        "quantity": "5000000"
+      },
+      "result": {
+        "ok": {
+          "quantity": 5,
+          "entryProbability": 0.4,
+          "premium": 2,
+          "fees": {
+            "trading": 0.244948,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 2.244948,
+          "costPerContract": 0.4489896,
+          "payoutMultiple": 2.227223080445516,
+          "raw": {
+            "quantity": "5000000",
+            "entryProbability": "400000000",
+            "premium": "2000000",
+            "tradingFee": "244948",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "2244948"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "range_two_legs": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "700000000",
+          "higherUp": "300000000"
+        },
+        "quantity": 50
+      },
+      "result": {
+        "ok": {
+          "quantity": 50,
+          "entryProbability": 0.4,
+          "premium": 20,
+          "fees": {
+            "trading": 4.582574,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 24.582574,
+          "costPerContract": 0.49165148,
+          "payoutMultiple": 2.0339611303519316,
+          "raw": {
+            "quantity": "50000000",
+            "entryProbability": "400000000",
+            "premium": "20000000",
+            "tradingFee": "4582574",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "24582574"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "band_edge_max": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "990000000",
+          "higherUp": null
+        },
+        "quantity": 1000
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "all-in cost 1012000000 exceeds the maximum payout 1000000000 (EMintCostAboveMaxPayout)"
+        }
+      }
+    },
+    "ramp_half_window": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "3000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799956800000",
+        "probabilities": {
+          "lowerUp": "500000000",
+          "higherUp": null
+        },
+        "quantity": 100
+      },
+      "result": {
+        "ok": {
+          "quantity": 100,
+          "entryProbability": 0.5,
+          "premium": 50,
+          "fees": {
+            "trading": 10,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 60,
+          "costPerContract": 0.6,
+          "payoutMultiple": 1.6666666666666667,
+          "raw": {
+            "quantity": "100000000",
+            "entryProbability": "500000000",
+            "premium": "50000000",
+            "tradingFee": "10000000",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "60000000"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "impact_enabled": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "50000000",
+          "inventoryImpactScale": "10000000000",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "500000000",
+          "higherUp": null
+        },
+        "quantity": 2000,
+        "book": {
+          "maxPayout": "400000000000",
+          "totalPayout": "900000000000",
+          "rangeMaxPayout": "100000000000"
+        }
+      },
+      "result": {
+        "ok": {
+          "quantity": 2000,
+          "entryProbability": 0.5,
+          "premium": 1000,
+          "fees": {
+            "trading": 100,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 31
+          },
+          "cost": 1131,
+          "costPerContract": 0.5655,
+          "payoutMultiple": 1.7683465959328029,
+          "raw": {
+            "quantity": "2000000000",
+            "entryProbability": "500000000",
+            "premium": "1000000000",
+            "tradingFee": "100000000",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "31000000",
+            "cost": "1131000000"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "lot_cap_scale": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "500000000",
+          "higherUp": null
+        },
+        "quantity": "42949672950000"
+      },
+      "result": {
+        "ok": {
+          "quantity": 42949672.95,
+          "entryProbability": 0.5,
+          "premium": 21474836.475,
+          "fees": {
+            "trading": 2147483.6475,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 23622320.1225,
+          "costPerContract": 0.55,
+          "payoutMultiple": 1.8181818181818181,
+          "raw": {
+            "quantity": "42949672950000",
+            "entryProbability": "500000000",
+            "premium": "21474836475000",
+            "tradingFee": "2147483647500",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "23622320122500"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "premium_below_min": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "500000000",
+          "higherUp": null
+        },
+        "quantity": "10000"
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "premium 5000 is below the 1000000 minimum (EPremiumBelowMinimum)"
+        }
+      }
+    },
+    "off_lot": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "900000000",
+          "higherUp": null
+        },
+        "quantity": "2005000"
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "quantity 2005000 must be a positive multiple of the 10000 lot size, at most 4294967295 lots (EInvalidQuantity)"
+        }
+      }
+    },
+    "band_breach": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "995000000",
+          "higherUp": null
+        },
+        "quantity": 100
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "entry probability 995000000 outside the market's [10000000, 990000000] admission band (EEntryProbabilityOutOfBounds)"
+        }
+      }
+    },
+    "cost_above_payout": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "3000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799999999999",
+        "probabilities": {
+          "lowerUp": "985000000",
+          "higherUp": null
+        },
+        "quantity": 100,
+        "builderCode": true,
+        "penaltyRate": "1000000000"
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "all-in cost 205599999 exceeds the maximum payout 100000000 (EMintCostAboveMaxPayout)"
+        }
+      }
+    },
+    "both_infinite": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": null,
+          "higherUp": null
+        },
+        "quantity": 100
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "a range cannot be infinite on both sides (EInvalidRange)"
+        }
+      }
+    },
+    "expired": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1800000000000",
+        "probabilities": {
+          "lowerUp": "500000000",
+          "higherUp": null
+        },
+        "quantity": 100
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "market expired at 1800000000000; a live trade at 1800000000000 aborts (ELivePricingExpired)"
+        }
+      }
+    }
+  },
+  "budget": {
+    "plain": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "budget": 100
+      },
+      "result": {
+        "ok": {
+          "quantity": 143.32,
+          "entryProbability": 0.65,
+          "premium": 93.158,
+          "fees": {
+            "trading": 6.835928,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 99.993928,
+          "costPerContract": 0.6976969578565448,
+          "payoutMultiple": 1.4332870291884123,
+          "raw": {
+            "quantity": "143320000",
+            "entryProbability": "650000000",
+            "premium": "93158000",
+            "tradingFee": "6835928",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "99993928",
+            "budget": "100000000",
+            "effectiveBudget": "100000000",
+            "unspentBudget": "6072"
+          },
+          "exactProbabilities": true,
+          "budget": 100,
+          "effectiveBudget": 100,
+          "unspentBudget": 0.006072
+        }
+      }
+    },
+    "balance_capped": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "budget": 100,
+        "accountBalance": 40.5
+      },
+      "result": {
+        "ok": {
+          "quantity": 58.04,
+          "entryProbability": 0.65,
+          "premium": 37.726,
+          "fees": {
+            "trading": 2.768331,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 40.494331,
+          "costPerContract": 0.6976969503790489,
+          "payoutMultiple": 1.4332870445495198,
+          "raw": {
+            "quantity": "58040000",
+            "entryProbability": "650000000",
+            "premium": "37726000",
+            "tradingFee": "2768331",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "40494331",
+            "budget": "100000000",
+            "effectiveBudget": "40500000",
+            "unspentBudget": "59505669"
+          },
+          "exactProbabilities": true,
+          "budget": 100,
+          "effectiveBudget": 40.5,
+          "unspentBudget": 59.505669
+        }
+      }
+    },
+    "whole_balance_sentinel": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "budget": "18446744073709551615",
+        "accountBalance": 25
+      },
+      "result": {
+        "ok": {
+          "quantity": 35.83,
+          "entryProbability": 0.65,
+          "premium": 23.2895,
+          "fees": {
+            "trading": 1.708982,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 24.998482,
+          "costPerContract": 0.6976969578565448,
+          "payoutMultiple": 1.4332870291884123,
+          "raw": {
+            "quantity": "35830000",
+            "entryProbability": "650000000",
+            "premium": "23289500",
+            "tradingFee": "1708982",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "24998482",
+            "budget": "18446744073709551615",
+            "effectiveBudget": "25000000",
+            "unspentBudget": "18446744073684553133"
+          },
+          "exactProbabilities": true,
+          "budget": 18446744073709.55,
+          "effectiveBudget": 25,
+          "unspentBudget": 18446744073684.555
+        }
+      }
+    },
+    "impact_enabled": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "50000000",
+          "inventoryImpactScale": "10000000000",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "500000000",
+          "higherUp": null
+        },
+        "budget": 5000,
+        "book": {
+          "maxPayout": "400000000000",
+          "totalPayout": "900000000000",
+          "rangeMaxPayout": "100000000000"
+        }
+      },
+      "result": {
+        "ok": {
+          "quantity": 8841.73,
+          "entryProbability": 0.5,
+          "premium": 4420.865,
+          "fees": {
+            "trading": 442.0865,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 137.046815
+          },
+          "cost": 4999.998315,
+          "costPerContract": 0.5655,
+          "payoutMultiple": 1.7683465959328029,
+          "raw": {
+            "quantity": "8841730000",
+            "entryProbability": "500000000",
+            "premium": "4420865000",
+            "tradingFee": "442086500",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "137046815",
+            "cost": "4999998315",
+            "budget": "5000000000",
+            "effectiveBudget": "5000000000",
+            "unspentBudget": "1685"
+          },
+          "exactProbabilities": true,
+          "budget": 5000,
+          "effectiveBudget": 5000,
+          "unspentBudget": 0.001685
+        }
+      }
+    },
+    "lot_cap_binding": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "10000000",
+          "higherUp": null
+        },
+        "budget": "10000000000000000000"
+      },
+      "result": {
+        "ok": {
+          "quantity": 42949672.95,
+          "entryProbability": 0.01,
+          "premium": 429496.7295,
+          "fees": {
+            "trading": 944892.8049,
+            "subsidy": 0,
+            "builder": 0,
+            "penalty": 0,
+            "impact": 0
+          },
+          "cost": 1374389.5344,
+          "costPerContract": 0.032,
+          "payoutMultiple": 31.25,
+          "raw": {
+            "quantity": "42949672950000",
+            "entryProbability": "10000000",
+            "premium": "429496729500",
+            "tradingFee": "944892804900",
+            "subsidy": "0",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactCharge": "0",
+            "cost": "1374389534400",
+            "budget": "10000000000000000000",
+            "effectiveBudget": "10000000000000000000",
+            "unspentBudget": "9999998625610465600"
+          },
+          "exactProbabilities": true,
+          "budget": 10000000000000,
+          "effectiveBudget": 10000000000000,
+          "unspentBudget": 9999998625610.465
+        }
+      }
+    },
+    "stepdown_fallback": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "50000000",
+          "inventoryImpactScale": "10000000000",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "970000000",
+          "higherUp": null
+        },
+        "budget": 20000,
+        "book": {
+          "maxPayout": "0",
+          "totalPayout": "0",
+          "rangeMaxPayout": "0"
+        },
+        "builderCode": true
+      },
+      "result": {
+        "ok": {
+          "quantity": 2320,
+          "entryProbability": 0.97,
+          "premium": 2250.4,
+          "fees": {
+            "trading": 51.04,
+            "subsidy": 0,
+            "builder": 5.104,
+            "penalty": 0,
+            "impact": 13.456
+          },
+          "cost": 2320,
+          "costPerContract": 1,
+          "payoutMultiple": 1,
+          "raw": {
+            "quantity": "2320000000",
+            "entryProbability": "970000000",
+            "premium": "2250400000",
+            "tradingFee": "51040000",
+            "subsidy": "0",
+            "builderFee": "5104000",
+            "penaltyFee": "0",
+            "impactCharge": "13456000",
+            "cost": "2320000000",
+            "budget": "20000000000",
+            "effectiveBudget": "20000000000",
+            "unspentBudget": "17680000000"
+          },
+          "exactProbabilities": true,
+          "budget": 20000,
+          "effectiveBudget": 20000,
+          "unspentBudget": 17680
+        }
+      }
+    },
+    "min_quantity_miss": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "budget": 5,
+        "minQuantity": 10
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "budget 5000000 sizes 7160000, below the 10000000 minimum (EMintQuantityBelowMin)"
+        }
+      }
+    }
+  },
+  "redeem": {
+    "plain": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "closeQuantity": 100
+      },
+      "result": {
+        "ok": {
+          "proceeds": 60.230304,
+          "gross": 65,
+          "fees": {
+            "trading": 4.769696,
+            "builder": 0,
+            "penalty": 0,
+            "impactRebate": 0
+          },
+          "quantityClosed": 100,
+          "remainingQuantity": null,
+          "proceedsPerContract": 0.60230304,
+          "probability": 0.65,
+          "raw": {
+            "proceeds": "60230304",
+            "gross": "65000000",
+            "tradingFee": "4769696",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactRebate": "0",
+            "quantityClosed": "100000000",
+            "remainingQuantity": null,
+            "probability": "650000000"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "fee_clamped_to_gross": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "5000000",
+          "higherUp": null
+        },
+        "closeQuantity": 100,
+        "builderCode": true,
+        "penaltyRate": "1000000000"
+      },
+      "result": {
+        "ok": {
+          "proceeds": 0,
+          "gross": 0.5,
+          "fees": {
+            "trading": 0.5,
+            "builder": 0,
+            "penalty": 0,
+            "impactRebate": 0
+          },
+          "quantityClosed": 100,
+          "remainingQuantity": null,
+          "proceedsPerContract": 0,
+          "probability": 0.005,
+          "raw": {
+            "proceeds": "0",
+            "gross": "500000",
+            "tradingFee": "500000",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactRebate": "0",
+            "quantityClosed": "100000000",
+            "remainingQuantity": null,
+            "probability": "5000000"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "rebate_with_clamp": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "50000000",
+          "inventoryImpactScale": "10000000000",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "5000000",
+          "higherUp": null
+        },
+        "closeQuantity": 100,
+        "book": {
+          "maxPayout": "400000000000",
+          "totalPayout": "900000000000",
+          "rangeMaxPayout": "100000000000",
+          "complementMaxPayout": "400000000000"
+        },
+        "builderCode": true
+      },
+      "result": {
+        "ok": {
+          "proceeds": 1.55,
+          "gross": 0.5,
+          "fees": {
+            "trading": 0.5,
+            "builder": 0,
+            "penalty": 0,
+            "impactRebate": 1.55
+          },
+          "quantityClosed": 100,
+          "remainingQuantity": null,
+          "proceedsPerContract": 0.0155,
+          "probability": 0.005,
+          "raw": {
+            "proceeds": "1550000",
+            "gross": "500000",
+            "tradingFee": "500000",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactRebate": "1550000",
+            "quantityClosed": "100000000",
+            "remainingQuantity": null,
+            "probability": "5000000"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "partial_with_remaining": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "800000000",
+          "higherUp": "200000000"
+        },
+        "closeQuantity": 25,
+        "positionQuantity": 100
+      },
+      "result": {
+        "ok": {
+          "proceeds": 13,
+          "gross": 15,
+          "fees": {
+            "trading": 2,
+            "builder": 0,
+            "penalty": 0,
+            "impactRebate": 0
+          },
+          "quantityClosed": 25,
+          "remainingQuantity": 75,
+          "proceedsPerContract": 0.52,
+          "probability": 0.6,
+          "raw": {
+            "proceeds": "13000000",
+            "gross": "15000000",
+            "tradingFee": "2000000",
+            "builderFee": "0",
+            "penaltyFee": "0",
+            "impactRebate": "0",
+            "quantityClosed": "25000000",
+            "remainingQuantity": "75000000",
+            "probability": "600000000"
+          },
+          "exactProbabilities": true
+        }
+      }
+    },
+    "close_exceeds_position": {
+      "inputs": {
+        "fees": {
+          "baseFee": "100000000",
+          "minFee": "22000000",
+          "expiryFeeWindowMs": "86400000",
+          "expiryFeeMaxMultiplier": "1000000000",
+          "minEntryProbability": "10000000",
+          "maxEntryProbability": "990000000",
+          "inventoryImpactMaxRate": "0",
+          "inventoryImpactScale": "0",
+          "backingBufferLambda": "310000000"
+        },
+        "expiryMs": "1800000000000",
+        "nowMs": "1799000000000",
+        "probabilities": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "closeQuantity": 100,
+        "positionQuantity": 50
+      },
+      "result": {
+        "error": {
+          "name": "PredictInputError",
+          "message": "closeQuantity exceeds positionQuantity"
+        }
+      }
+    }
+  },
+  "components": {
+    "bernoulli": [
+      {
+        "p": "0",
+        "rate": "0"
+      },
+      {
+        "p": "1000000000",
+        "rate": "0"
+      },
+      {
+        "p": "500000000",
+        "rate": "50000000"
+      },
+      {
+        "p": "250000000",
+        "rate": "43301270"
+      },
+      {
+        "p": "10000000",
+        "rate": "9949874"
+      },
+      {
+        "p": "999999999",
+        "rate": "0"
+      }
+    ],
+    "sqrtDown": [
+      {
+        "x": "0",
+        "v": "0"
+      },
+      {
+        "x": "1",
+        "v": "31622"
+      },
+      {
+        "x": "2",
+        "v": "44721"
+      },
+      {
+        "x": "1000000000",
+        "v": "1000000000"
+      },
+      {
+        "x": "250000000",
+        "v": "500000000"
+      },
+      {
+        "x": "123456789",
+        "v": "351364182"
+      },
+      {
+        "x": "999999999999",
+        "v": "31622776601"
+      }
+    ],
+    "expiryMultiplier": [
+      {
+        "t": "0",
+        "v": "3000000000"
+      },
+      {
+        "t": "1",
+        "v": "2999999976"
+      },
+      {
+        "t": "43200000",
+        "v": "2000000000"
+      },
+      {
+        "t": "86399999",
+        "v": "1000000023"
+      },
+      {
+        "t": "86400000",
+        "v": "1000000000"
+      },
+      {
+        "t": "100000000",
+        "v": "1000000000"
+      }
+    ],
+    "tradingFeeTwoLegs": "9165150",
+    "congestion": [
+      {
+        "gas": "1000",
+        "rate": "0"
+      },
+      {
+        "gas": "100000",
+        "rate": "30000000"
+      }
+    ],
+    "impactPotential": [
+      {
+        "l": "0",
+        "v": "0"
+      },
+      {
+        "l": "5000000000",
+        "v": "62500000"
+      },
+      {
+        "l": "10000000000",
+        "v": "250000000"
+      },
+      {
+        "l": "20000000000",
+        "v": "750000000"
+      }
+    ],
+    "mintImpact": "31000000",
+    "closeImpact": "31000000",
+    "rangeProbability": [
+      {
+        "b": {
+          "lowerUp": "700000000",
+          "higherUp": "300000000"
+        },
+        "v": "400000000"
+      },
+      {
+        "b": {
+          "lowerUp": "650000000",
+          "higherUp": null
+        },
+        "v": "650000000"
+      },
+      {
+        "b": {
+          "lowerUp": null,
+          "higherUp": "650000000"
+        },
+        "v": "350000000"
+      },
+      {
+        "b": {
+          "lowerUp": "300000000",
+          "higherUp": "700000000"
+        },
+        "v": "0"
+      }
+    ]
+  }
+}

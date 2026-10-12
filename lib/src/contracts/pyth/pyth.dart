@@ -9,12 +9,12 @@ import 'package:sui/bcs/sui_bcs.dart';
 import 'package:sui/sui.dart' show Transaction;
 import '../utils.dart';
 
-MoveCallBuilder initPyth({String? package}) {
+MoveCallBuilder initPyth({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::init_pyth',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{}, [
+        arguments: normalizeMoveArguments(tx, arguments, [
           null,
           null,
           'u64',
@@ -27,113 +27,118 @@ MoveCallBuilder initPyth({String? package}) {
       );
 }
 
-MoveCallBuilder createPriceFeedsUsingAccumulator({String? package}) {
+MoveCallBuilder createPriceFeedsUsingAccumulator(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::create_price_feeds_using_accumulator',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, 'vector<u8>', null, '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, 'vector<u8>', null, '0x2::clock::Clock'], []),
       );
 }
 
-MoveCallBuilder createPriceFeeds({String? package}) {
+MoveCallBuilder createPriceFeeds(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::create_price_feeds',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, 'vector<null>', '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, 'vector<null>', '0x2::clock::Clock'], []),
       );
 }
 
 MoveCallBuilder createAuthenticatedPriceInfosUsingAccumulator(
-    {String? package}) {
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::create_authenticated_price_infos_using_accumulator',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, 'vector<u8>', null, '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, 'vector<u8>', null, '0x2::clock::Clock'], []),
       );
 }
 
-MoveCallBuilder createPriceInfosHotPotato({String? package}) {
+MoveCallBuilder createPriceInfosHotPotato(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::create_price_infos_hot_potato',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, 'vector<null>', '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, 'vector<null>', '0x2::clock::Clock'], []),
       );
 }
 
-MoveCallBuilder updateSinglePriceFeed({String? package}) {
+MoveCallBuilder updateSinglePriceFeed(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::update_single_price_feed',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, null, null, null, '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, null, null, null, '0x2::clock::Clock'], []),
       );
 }
 
-MoveCallBuilder priceFeedExists({String? package}) {
+MoveCallBuilder priceFeedExists(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::price_feed_exists',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }
 
-MoveCallBuilder getPrice({String? package}) {
+MoveCallBuilder getPrice({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::get_price',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, null, '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, null, '0x2::clock::Clock'], []),
       );
 }
 
-MoveCallBuilder getPriceNoOlderThan({String? package}) {
+MoveCallBuilder getPriceNoOlderThan(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::get_price_no_older_than',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            [null, '0x2::clock::Clock', 'u64'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, [null, '0x2::clock::Clock', 'u64'], []),
       );
 }
 
-MoveCallBuilder getPriceUnsafe({String? package}) {
+MoveCallBuilder getPriceUnsafe(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::get_price_unsafe',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getStalePriceThresholdSecs({String? package}) {
+MoveCallBuilder getStalePriceThresholdSecs(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::get_stale_price_threshold_secs',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getTotalUpdateFee({String? package}) {
+MoveCallBuilder getTotalUpdateFee(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::pyth::get_total_update_fee',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, 'u64'], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, 'u64'], []),
       );
 }

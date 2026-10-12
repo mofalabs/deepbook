@@ -29,42 +29,42 @@ final BatchPriceAttestation =
   'price_infos': Bcs.vector(price_info.PriceInfo),
 });
 
-MoveCallBuilder destroy({String? package}) {
+MoveCallBuilder destroy({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::batch_price_attestation::destroy',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getAttestationCount({String? package}) {
+MoveCallBuilder getAttestationCount(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::batch_price_attestation::get_attestation_count',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getPriceInfo({String? package}) {
+MoveCallBuilder getPriceInfo(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::batch_price_attestation::get_price_info',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, 'u64'], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, 'u64'], []),
       );
 }
 
-MoveCallBuilder deserialize({String? package}) {
+MoveCallBuilder deserialize(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::batch_price_attestation::deserialize',
-        arguments: normalizeMoveArguments(tx, const <String, dynamic>{},
-            ['vector<u8>', '0x2::clock::Clock'], []),
+        arguments: normalizeMoveArguments(
+            tx, arguments, ['vector<u8>', '0x2::clock::Clock'], []),
       );
 }

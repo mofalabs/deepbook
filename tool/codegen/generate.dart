@@ -119,6 +119,8 @@ void main(List<String> argv) {
       .whereType<File>()
       .where((f) => f.path.endsWith('.ts'))
       .where((f) => !f.path.endsWith('utils/index.ts'))
+      // Type-only companions of the config-mapped builders; nothing to emit.
+      .where((f) => !f.path.endsWith('config-arguments.ts'))
       .toList()
     ..sort((a, b) => a.path.compareTo(b.path));
 
@@ -154,6 +156,10 @@ class Ctx {
   final Map<String, String> importAliases = {}; // dart alias → import path
   final Map<String, String> aliasRenames = {}; // ts alias → dart alias
   final Set<String> localGenericStructs = {};
+  // Identifiers named-imported from src/bcs/integers.ts (bigint-parsing
+  // u64/u128/u256 overrides) → their Dart equivalents. Our Bcs.u64() already
+  // parses to BigInt, so these map straight onto SuiBcs.
+  final Map<String, String> identifierMap = {};
   Ctx(this.tsPath, this.relPath);
 }
 
@@ -180,6 +186,22 @@ TranspileResult transpile(String src, String relPath, String tsPath) {
     path = path.replaceFirst(RegExp(r'\.js$'), '.dart');
     ctx.importAliases[dartAlias(alias)] = path;
     ctx.aliasRenames[alias] = dartAlias(alias);
+  }
+
+  // Named imports from src/bcs/integers.ts: U64/U128/U256 parse to bigint in
+  // TS; Dart's Bcs integers already parse to BigInt, so map onto SuiBcs.
+  for (final m in RegExp(
+          r"import \{([^}]*)\} from '(?:\.\./)+bcs/integers\.js';",
+          dotAll: true)
+      .allMatches(src)) {
+    for (final raw in m.group(1)!.split(',')) {
+      final name = raw.trim();
+      if (name.isEmpty) continue;
+      if (!const {'U64', 'U128', 'U256'}.contains(name)) {
+        fail(ctx, 'unknown integers.js import $name');
+      }
+      ctx.identifierMap[name] = 'SuiBcs.$name';
+    }
   }
 
   // Pre-scan local generic struct names (declared as functions).
@@ -307,7 +329,9 @@ String _precedingDoc(String src, int at) {
 }
 
 /// The text of a balanced bracket group starting at [openIdx] (inclusive
-/// brackets stripped). Skips brackets inside string literals.
+/// brackets stripped). Skips brackets inside string literals and comments
+/// (the new codegen template emits `/** … */` docs — with apostrophes —
+/// inside field maps).
 String _balancedSlice(String src, int openIdx, String open, String close) {
   var depth = 0;
   String? inString;
@@ -319,6 +343,18 @@ String _balancedSlice(String src, int openIdx, String open, String close) {
       } else if (c == inString) {
         inString = null;
       }
+      continue;
+    }
+    if (c == '/' && i + 1 < src.length && src[i + 1] == '*') {
+      final end = src.indexOf('*/', i + 2);
+      if (end == -1) throw StateError('unterminated /* at $i');
+      i = end + 1;
+      continue;
+    }
+    if (c == '/' && i + 1 < src.length && src[i + 1] == '/') {
+      final end = src.indexOf('\n', i);
+      if (end == -1) break;
+      i = end;
       continue;
     }
     if (c == "'" || c == '"' || c == '`') {
@@ -443,6 +479,10 @@ String _translateBcsExpr(Ctx ctx, String expr) {
   final tpM = RegExp(r'^typeParameters\[(\d+)\]$').firstMatch(e);
   if (tpM != null) return 't${tpM.group(1)}';
 
+  // Named imports with a fixed Dart mapping (integers.js overrides).
+  final mapped = ctx.identifierMap[e];
+  if (mapped != null) return mapped;
+
   // <alias>.<Name>(...) | <alias>.<Name> | <Name>(...) | <Name>
   final refM = RegExp(r'^(?:(\w+)\.)?([A-Za-z_]\w*)(\(.*\))?$', dotAll: true)
       .firstMatch(e);
@@ -514,12 +554,49 @@ String _emitStruct(
       '  $schemaExpr;\n\n';
 }
 
+/// Keep in sync with `_wellKnownObjects` in `lib/src/contracts/utils.dart`:
+/// these argument slots are auto-injected by the runtime, not user-supplied.
+const _wellKnownTypes = {
+  '0x2::clock::Clock',
+  '0x2::random::Random',
+  '0x2::deny_list::DenyList',
+  '0x2::accumulator::AccumulatorRoot',
+  '0x3::sui_system::SuiSystemState',
+};
+
 String _emitFunctionBuilder(Ctx ctx, String tsName, String fnBody, String doc) {
   final name = dartName(tsName);
 
-  final pkgM = RegExp(r"options\.package \?\? '([^']+)'").firstMatch(fnBody);
+  // `options.package ?? 'X'`, optionally with a config-provided package id in
+  // the middle: `options.package ?? options.config?.fooPackageId ?? 'X'`
+  // (possibly line-wrapped by prettier).
+  final pkgM = RegExp(
+          r"options\.package \?\?\s*(?:options\.config\?\.(\w+) \?\?\s*)?'([^']+)'")
+      .firstMatch(fnBody);
   if (pkgM == null) fail(ctx, 'builder $tsName: missing default package');
-  final defaultPackage = pkgM.group(1)!;
+  final packageConfigKey = pkgM.group(1);
+  final defaultPackage = pkgM.group(2)!;
+
+  // Config-defaulted arguments:
+  //   `param: options.arguments?.param ?? options.config?.configKey`
+  // inside a `{ ...options.arguments, ... }` merge.
+  final configDefaults = <String, String>{}; // param → config key
+  if (fnBody.contains('...options.arguments')) {
+    for (final m in RegExp(
+            r'(\w+):\s*options\.arguments\?\.(\w+)\s*\?\?\s*options\.config\?\.(\w+)')
+        .allMatches(fnBody)) {
+      if (m.group(1) != m.group(2)) {
+        fail(ctx, 'builder $tsName: config default renames ${m.group(2)}');
+      }
+      configDefaults[m.group(1)!] = m.group(3)!;
+    }
+    if (configDefaults.isEmpty) {
+      fail(ctx, 'builder $tsName: unrecognized arguments merge');
+    }
+  } else if (fnBody.contains('options.config?.') && packageConfigKey == null) {
+    fail(ctx, 'builder $tsName: unrecognized options.config usage');
+  }
+  final usesConfig = packageConfigKey != null || configDefaults.isNotEmpty;
 
   final moduleM = RegExp(r"module:\s*'([^']+)'").firstMatch(fnBody);
   final functionM = RegExp(r"function:\s*'([^']+)'").firstMatch(fnBody);
@@ -570,30 +647,60 @@ String _emitFunctionBuilder(Ctx ctx, String tsName, String fnBody, String doc) {
   final usesTypeArguments = fnBody.contains('options.typeArguments');
   final hasArguments = fnBody.contains('normalizeMoveArguments');
 
+  // User-supplied argument slots: everything except well-known singleton
+  // objects, which the runtime injects by bare id. Old-style modules (pyth)
+  // have no parameterNames yet still take positional user arguments.
+  final userArgCount = argTypeExprs.where((e) {
+    if (!e.startsWith("'")) return true; // `null` or a type-args template
+    return !_wellKnownTypes.contains(e.substring(1, e.length - 1));
+  }).length;
+
   final params = <String>[];
   if (hasArguments && paramNames.isNotEmpty) {
-    params.add('required dynamic arguments');
+    // With config defaults every remaining argument may be fillable from
+    // `config`, so `arguments` becomes optional (TS marks it `arguments?:`).
+    params.add(configDefaults.isNotEmpty
+        ? 'dynamic arguments'
+        : 'required dynamic arguments');
+  } else if (hasArguments && userArgCount > 0) {
+    // Old-style positional builder (`normalizeMoveArguments(options.arguments,
+    // argumentsTypes)` with no parameterNames): arguments is a required List.
+    params.add('required List<dynamic> arguments');
   }
   params.add('String? package');
   if (usesTypeArguments) {
     params.add('List<String> typeArguments = const []');
   }
+  if (usesConfig) {
+    params.add('Map<String, dynamic>? config');
+  }
 
   final argTypesList = '[${argTypeExprs.join(', ')}]';
   final paramNamesList = '[${paramNames.map((n) => "'$n'").join(', ')}]';
 
+  final packageExpr = packageConfigKey == null
+      ? "package ?? '$defaultPackage'"
+      : "package ?? (config?['$packageConfigKey'] as String?) ?? '$defaultPackage'";
+
   final buf = StringBuffer()
     ..write(doc)
     ..writeln('MoveCallBuilder $name({${params.join(', ')}}) {')
-    ..writeln("  final packageAddress = package ?? '$defaultPackage';")
+    ..writeln('  final packageAddress = $packageExpr;')
     ..writeln('  return (tx) => tx.moveCall(')
     ..writeln("        '\$packageAddress::$moveModule::$moveFunction',");
   if (usesTypeArguments) {
     buf.writeln('        typeArguments: typeArguments,');
   }
   if (hasArguments) {
-    final argsExpr =
-        paramNames.isNotEmpty ? 'arguments' : 'const <String, dynamic>{}';
+    var argsExpr = paramNames.isNotEmpty || userArgCount > 0
+        ? 'arguments'
+        : 'const <String, dynamic>{}';
+    if (configDefaults.isNotEmpty) {
+      final defaults = configDefaults.entries
+          .map((e) => "'${e.key}': '${e.value}'")
+          .join(', ');
+      argsExpr = 'withConfigDefaults($argsExpr, config, const {$defaults})';
+    }
     buf.writeln(
         '        arguments: normalizeMoveArguments(tx, $argsExpr, $argTypesList, $paramNamesList),');
   }

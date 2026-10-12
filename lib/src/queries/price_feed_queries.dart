@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:sui/sui.dart' show Transaction;
 
 import '../config.dart';
+import '../constants.dart';
 import '../contracts/pyth/price_info.dart' as price_info;
 import '../errors.dart';
 import '../pyth/price_service_connection.dart';
@@ -17,6 +18,56 @@ class PriceFeedQueries {
   final QueryContext _ctx;
 
   PriceFeedQueries(this._ctx);
+
+  /// The Hermes endpoint serving the Pyth deployment margin is configured
+  /// against.
+  ///
+  /// There are two routes, chosen by whether the caller brought credentials.
+  /// With `accessToken` set, the SDK talks to Pyth directly and no DeepBook
+  /// infrastructure is in the path — the token is sent to Pyth's own host, so
+  /// a token minted for some other endpoint must be paired with an explicit
+  /// `hermesEndpoint`.
+  ///
+  /// Note the converse too: an explicit `hermesEndpoint` wins over
+  /// everything, and the token is sent to whatever host it names.
+  ///
+  /// Without a token it falls back to the DeepBook-operated proxy, which
+  /// supplies credentials server-side; that proxy is not deployed yet, so
+  /// today this path throws a [ConfigurationError] instead.
+  String _hermesEndpoint() {
+    final pyth = _ctx.config.pyth;
+    // Empty strings count as "not provided", matching the official SDK's
+    // truthiness checks on these fields.
+    final hermesEndpoint = pyth.hermesEndpoint;
+    if (hermesEndpoint != null && hermesEndpoint.isNotEmpty) {
+      return hermesEndpoint;
+    }
+    final accessToken = pyth.accessToken;
+    if (accessToken != null && accessToken.isNotEmpty) {
+      return PYTH_UPGRADED_HERMES;
+    }
+    if (DEEPBOOK_HERMES_PROXY != null) {
+      return DEEPBOOK_HERMES_PROXY!;
+    }
+    throw ConfigurationError(
+        "Pushing price updates against Pyth's upgraded Core needs "
+        'credentials: its Hermes answers 401 unauthenticated. Set the '
+        "client's `pythAccessToken` option (or `pyth.accessToken`), or point "
+        '`pyth.hermesEndpoint` at an endpoint that supplies credentials '
+        'itself.');
+  }
+
+  /// A Hermes connection for the active Pyth deployment, carrying any
+  /// configured auth headers. The endpoint serving the upgraded Core requires
+  /// an `Authorization` header and answers 401 without one.
+  SuiPriceServiceConnection _connection() {
+    final accessToken = _ctx.config.pyth.accessToken;
+    return SuiPriceServiceConnection(
+      _hermesEndpoint(),
+      accessToken:
+          accessToken != null && accessToken.isNotEmpty ? accessToken : null,
+    );
+  }
 
   /// Ensures a fresh PriceInfoObject for [coinKey]: if the on-chain object is
   /// recent enough its id is returned directly, otherwise price-update
@@ -29,13 +80,12 @@ class PriceFeedQueries {
     if (priceInfoObjectAge != 0 &&
         currentTime - priceInfoObjectAge * 1000 <
             PRICE_INFO_OBJECT_MAX_AGE_MS) {
-      return _ctx.config.getCoin(coinKey).priceInfoObjectId!;
+      return _ctx.config.getPriceInfoObjectId(coinKey);
     }
 
-    final connection =
-        SuiPriceServiceConnection(hermesEndpoint(_ctx.config.network));
+    final connection = _connection();
 
-    final priceIds = [_ctx.config.getCoin(coinKey).feed!];
+    final priceIds = [_ctx.config.getFeedId(coinKey)];
 
     final priceUpdateData = await connection.getPriceFeedsUpdateData(priceIds);
 
@@ -60,7 +110,7 @@ class PriceFeedQueries {
     final coinToObjectId = <String, String>{};
     final objectIds = <String>[];
     for (final coinKey in coinKeys) {
-      final priceInfoObjectId = _ctx.config.getCoin(coinKey).priceInfoObjectId!;
+      final priceInfoObjectId = _ctx.config.getPriceInfoObjectId(coinKey);
       coinToObjectId[coinKey] = priceInfoObjectId;
       objectIds.add(priceInfoObjectId);
     }
@@ -96,16 +146,26 @@ class PriceFeedQueries {
 
     if (staleCoinKeys.isEmpty) return result;
 
+    // Distinct coins can share a feed. No shipped map has a collision, but
+    // `coins` is a public constructor option, and coins tracking the same
+    // underlying (a wrapped asset priced off its reference, say) are the
+    // normal reason to supply one. Deduplicate before building the update: a
+    // feed listed twice would emit two `update_single_price_feed` calls
+    // against the same object off one hot-potato vector, and pay two update
+    // fees for it. One feed can also map to several coins, so the reverse
+    // index holds a list, not a single key.
     final staleFeedIds = <String>[];
-    final feedIdToCoinKey = <String, String>{};
+    final feedIdToCoinKeys = <String, List<String>>{};
     for (final coinKey in staleCoinKeys) {
-      final feedId = _ctx.config.getCoin(coinKey).feed!;
-      staleFeedIds.add(feedId);
-      feedIdToCoinKey[feedId] = coinKey;
+      final feedId = _ctx.config.getFeedId(coinKey);
+      if (!feedIdToCoinKeys.containsKey(feedId)) {
+        feedIdToCoinKeys[feedId] = [];
+        staleFeedIds.add(feedId);
+      }
+      feedIdToCoinKeys[feedId]!.add(coinKey);
     }
 
-    final connection =
-        SuiPriceServiceConnection(hermesEndpoint(_ctx.config.network));
+    final connection = _connection();
 
     final priceUpdateData =
         await connection.getPriceFeedsUpdateData(staleFeedIds);
@@ -120,8 +180,9 @@ class PriceFeedQueries {
         await pythClient.updatePriceFeeds(tx, priceUpdateData, staleFeedIds);
 
     for (var i = 0; i < staleFeedIds.length; i++) {
-      final coinKey = feedIdToCoinKey[staleFeedIds[i]]!;
-      result[coinKey] = updatedObjectIds[i];
+      for (final coinKey in feedIdToCoinKeys[staleFeedIds[i]]!) {
+        result[coinKey] = updatedObjectIds[i];
+      }
     }
 
     return result;
@@ -130,7 +191,7 @@ class PriceFeedQueries {
   /// The arrival time (unix seconds) of the on-chain PriceInfoObject for
   /// [coinKey].
   Future<int> getPriceInfoObjectAge(String coinKey) async {
-    final priceInfoObjectId = _ctx.config.getCoin(coinKey).priceInfoObjectId!;
+    final priceInfoObjectId = _ctx.config.getPriceInfoObjectId(coinKey);
     final res = await _ctx.core
         .getObject(priceInfoObjectId, readMask: const ['contents']);
 

@@ -103,12 +103,13 @@ class DeepBookConfig {
     MarginPoolMap? marginPools,
     DeepbookPackageIds? packageIds,
     PythConfig? pyth,
+    String? pythAccessToken,
   }) {
     final CoinMap resolvedCoins;
     final PoolMap resolvedPools;
     final MarginPoolMap resolvedMarginPools;
     final DeepbookPackageIds ids;
-    final PythConfig resolvedPyth;
+    PythConfig resolvedPyth;
 
     if (packageIds != null) {
       ids = packageIds;
@@ -133,6 +134,16 @@ class DeepBookConfig {
       throw ConfigurationError(
           "Network '$network' is not supported by default. Provide custom "
           "'packageIds' for non-standard networks.");
+    }
+
+    // Applied after the branches so a token composes with the built-in state
+    // objects instead of forcing the caller to restate them.
+    // Empty is treated as absent rather than as a credential: a blank value
+    // exported from the environment is the common way this arrives, and a
+    // blank bearer header 401s with a worse message than the configuration
+    // error.
+    if (pythAccessToken != null && pythAccessToken.isNotEmpty) {
+      resolvedPyth = resolvedPyth.withAccessToken(pythAccessToken);
     }
 
     return DeepBookConfig._(
@@ -182,6 +193,38 @@ class DeepBookConfig {
           "Pyth configuration is required for price feed operations. "
           "Provide 'pyth' when using custom packageIds.");
     }
+  }
+
+  /// The Pyth feed id for a coin under the active deployment.
+  ///
+  /// Pairs with [getPriceInfoObjectId]: Hermes is queried by feed id and the
+  /// Move call takes the object, so the two must come from the same
+  /// deployment or the update lands on an object the on-chain feed-id check
+  /// then rejects.
+  String getFeedId(String coinKey) {
+    final feed = getCoin(coinKey).feed;
+    if (feed == null) {
+      throw ConfigurationError(
+          "Coin '$coinKey' has no Pyth feed id configured.");
+    }
+    return feed;
+  }
+
+  /// The `PriceInfoObject` id for a coin on Pyth's upgraded Core.
+  ///
+  /// Throws rather than passing a null into a move call: a feed may simply
+  /// have no object on the upgraded deployment yet, and the resulting
+  /// on-chain abort (`EPriceFeedIdMismatch`) does not say which coin was at
+  /// fault.
+  String getPriceInfoObjectId(String coinKey) {
+    final priceInfoObjectId = getCoin(coinKey).priceInfoObjectId;
+    if (priceInfoObjectId == null) {
+      throw ConfigurationError(
+          "Coin '$coinKey' has no priceInfoObjectId. Pyth's upgraded Core has "
+          "no price feed object for it on $network, or the id is missing from "
+          "your coin config.");
+    }
+    return priceInfoObjectId;
   }
 
   /// Returns the configured [Coin] for [key]; throws [ResourceNotFoundError]

@@ -16,23 +16,21 @@ final GovernanceAction = Bcs.struct('${$moduleName}::GovernanceAction', {
   'value': SuiBcs.U8,
 });
 
-MoveCallBuilder fromU8({String? package}) {
+MoveCallBuilder fromU8({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_action::from_u8',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, ['u8'], []),
+        arguments: normalizeMoveArguments(tx, arguments, ['u8'], []),
       );
 }
 
-MoveCallBuilder getValue({String? package}) {
+MoveCallBuilder getValue({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_action::get_value',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 

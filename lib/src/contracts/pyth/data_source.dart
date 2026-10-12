@@ -19,32 +19,32 @@ final DataSource = Bcs.struct('${$moduleName}::DataSource', {
   'emitter_address': external_address.ExternalAddress,
 });
 
-MoveCallBuilder contains({String? package}) {
+MoveCallBuilder contains({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::data_source::contains',
         arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['0x2::object::ID', null], []),
+            tx, arguments, ['0x2::object::ID', null], []),
       );
 }
 
-MoveCallBuilder emitterChain({String? package}) {
+MoveCallBuilder emitterChain(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::data_source::emitter_chain',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder emitterAddress({String? package}) {
+MoveCallBuilder emitterAddress(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::data_source::emitter_address',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }

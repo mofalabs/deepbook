@@ -21,52 +21,49 @@ final GovernanceInstruction =
   'payload': Bcs.vector(SuiBcs.U8),
 });
 
-MoveCallBuilder fromByteVec({String? package}) {
+MoveCallBuilder fromByteVec(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_instruction::from_byte_vec',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['vector<u8>'], []),
+        arguments: normalizeMoveArguments(tx, arguments, ['vector<u8>'], []),
       );
 }
 
-MoveCallBuilder getModule({String? package}) {
+MoveCallBuilder getModule({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_instruction::get_module',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getAction({String? package}) {
+MoveCallBuilder getAction({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_instruction::get_action',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getTargetChainId({String? package}) {
+MoveCallBuilder getTargetChainId(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_instruction::get_target_chain_id',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder destroy({String? package}) {
+MoveCallBuilder destroy({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::governance_instruction::destroy',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }

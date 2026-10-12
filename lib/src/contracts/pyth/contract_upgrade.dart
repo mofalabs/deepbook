@@ -23,22 +23,22 @@ final UpgradeContract = Bcs.struct('${$moduleName}::UpgradeContract', {
   'digest': bytes32.Bytes32,
 });
 
-MoveCallBuilder authorizeUpgrade({String? package}) {
+MoveCallBuilder authorizeUpgrade(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::contract_upgrade::authorize_upgrade',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }
 
-MoveCallBuilder commitUpgrade({String? package}) {
+MoveCallBuilder commitUpgrade(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::contract_upgrade::commit_upgrade',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }

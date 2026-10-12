@@ -1,0 +1,97 @@
+{
+  "version": 2,
+  "sender": "0x00000000000000000000000000000000000000000000000000000000000000aa",
+  "expiration": null,
+  "gasData": {
+    "budget": null,
+    "price": null,
+    "owner": null,
+    "payment": null
+  },
+  "inputs": [
+    {
+      "UnresolvedObject": {
+        "objectId": "0x6fd178a49848387d60ccfd3e53bf06969929970246a3a7983ae5bb2a5ed52ee3"
+      }
+    },
+    {
+      "UnresolvedObject": {
+        "objectId": "0x3cd38d57ef042e652f8acffb26edca21c98b82bbc9367a3b2c29cf4bb242b2d8"
+      }
+    },
+    {
+      "UnresolvedObject": {
+        "objectId": "0x422a45c31128e69d0310ab3bed28bd14f730acf9f5681f70936d20c60d26bfb0"
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "EIPqDgAAAAA="
+      }
+    },
+    {
+      "Pure": {
+        "bytes": "Fc1bBwAAAAA="
+      }
+    },
+    {
+      "UnresolvedObject": {
+        "objectId": "0x0000000000000000000000000000000000000000000000000000000000000acc"
+      }
+    },
+    {
+      "Object": {
+        "SharedObject": {
+          "objectId": "0x0000000000000000000000000000000000000000000000000000000000000006",
+          "initialSharedVersion": 1,
+          "mutable": false
+        }
+      }
+    }
+  ],
+  "commands": [
+    {
+      "MoveCall": {
+        "package": "0x1e57d6554b99e4ca68330322c3e5c409ba1b681642726b603bf1be92c1840ca9",
+        "module": "account",
+        "function": "generate_auth",
+        "typeArguments": [],
+        "arguments": []
+      }
+    },
+    {
+      "MoveCall": {
+        "package": "0x6c2c2d3c2394cf282f4b8462a99c2e814bda0c223796de10b47b36d35fd878f5",
+        "module": "plp",
+        "function": "request_supply",
+        "typeArguments": [],
+        "arguments": [
+          {
+            "Input": 0
+          },
+          {
+            "Input": 1
+          },
+          {
+            "Result": 0
+          },
+          {
+            "Input": 2
+          },
+          {
+            "Input": 3
+          },
+          {
+            "Input": 4
+          },
+          {
+            "Input": 5
+          },
+          {
+            "Input": 6
+          }
+        ]
+      }
+    }
+  ]
+}

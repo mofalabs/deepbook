@@ -33,6 +33,39 @@ final ConversionConfig = Bcs.struct('${$moduleName}::ConversionConfig', {
   'pyth_decimals': SuiBcs.U8,
 });
 
+final PythReading = Bcs.struct('${$moduleName}::PythReading', {
+  'price': SuiBcs.U64,
+  'decimals': SuiBcs.U8,
+  'conf': Bcs.option(SuiBcs.U64),
+  'coin_type': type_name.TypeName,
+});
+
+/// Superseded by `new_coin_type_data_from_currency`, which reads decimals from
+/// `Currency` instead of trusting the caller-supplied `CoinMetadata`. Retained as
+/// an aborting stub because it is public in the deployed package: a `compatible`
+/// upgrade cannot drop a public function.
+MoveCallBuilder newCoinTypeData(
+    {required dynamic arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
+  final packageAddress = package ?? '@deepbook/margin';
+  return (tx) => tx.moveCall(
+        '$packageAddress::oracle::new_coin_type_data',
+        typeArguments: typeArguments,
+        arguments: normalizeMoveArguments(tx, arguments, [
+          null,
+          'vector<u8>',
+          'u64',
+          'u64'
+        ], [
+          'CoinMetadata',
+          'PriceFeedId',
+          'MaxConfBps',
+          'MaxEwmaDifferenceBps'
+        ]),
+      );
+}
+
 /// Creates a new CoinTypeData struct of type T. Uses Currency to avoid any errors
 /// in decimals.
 MoveCallBuilder newCoinTypeDataFromCurrency(

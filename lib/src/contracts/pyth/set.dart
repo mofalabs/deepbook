@@ -33,37 +33,43 @@ MoveCallBuilder new_({String? package, List<String> typeArguments = const []}) {
       );
 }
 
-MoveCallBuilder add({String? package, List<String> typeArguments = const []}) {
+MoveCallBuilder add(
+    {required List<dynamic> arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::set::add',
         typeArguments: typeArguments,
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, typeArguments[0]], []),
+        arguments:
+            normalizeMoveArguments(tx, arguments, [null, typeArguments[0]], []),
       );
 }
 
 MoveCallBuilder contains(
-    {String? package, List<String> typeArguments = const []}) {
+    {required List<dynamic> arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::set::contains',
         typeArguments: typeArguments,
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, typeArguments[0]], []),
+        arguments:
+            normalizeMoveArguments(tx, arguments, [null, typeArguments[0]], []),
       );
 }
 
 MoveCallBuilder empty(
-    {String? package, List<String> typeArguments = const []}) {
+    {required List<dynamic> arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::set::empty',
         typeArguments: typeArguments,
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }

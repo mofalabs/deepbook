@@ -37,7 +37,7 @@
   "commands": [
     {
       "MoveCall": {
-        "package": "0xe52c1dece2bb5d5645689d6da8b8debe8347e3446011704a4fcb386746876580",
+        "package": "0xce6ab6290458f597fc078793335f4b1d98479f29ebc02198ae960e9401d0c72f",
         "module": "margin_manager",
         "function": "new",
         "typeArguments": [

@@ -1,0 +1,106 @@
+/// Testnet deployment record, ported verbatim from the official
+/// `src/deployments/testnet.ts` (generated there by `pnpm sync-deployment`).
+/// Do not hand-edit ids: re-port from upstream on a redeploy.
+///
+/// Deployment: deepbook-predict-testnet
+/// sourceCommit: 4d752fb82d909a821c85bcc5d3963725efb546f4
+// Official SCREAMING_CAPS constant names are kept verbatim.
+// ignore_for_file: constant_identifier_names
+library;
+
+import 'types.dart';
+
+/// Which on-chain deployment the ids below came from.
+const TESTNET_DEPLOYMENT = DeploymentInfo(
+  deployment: 'deepbook-predict-testnet',
+  network: 'testnet',
+  chainId: '4c78adac',
+  sourceCommit: '4d752fb82d909a821c85bcc5d3963725efb546f4',
+);
+
+/// Ids for the shared `account` primitive — the `/account` subpath's slice.
+const testnetAccount = AccountIds(
+  accountPackageId:
+      '0x1e57d6554b99e4ca68330322c3e5c409ba1b681642726b603bf1be92c1840ca9',
+  accountRegistry:
+      '0x511e11f7f5d5c1043d795180657603d59e06e90fbfcafd3f90c67ff0836bbd0c',
+);
+
+/// Ids for time-limited sessions — the `/sessions` subpath's slice.
+///
+/// `deepbookRegistry` is only needed by the DeepBook **spot** session
+/// wrappers; the Predict wrappers never take it.
+const testnetSessions = SessionsIds(
+  sessionsPackageId:
+      '0xe9daa1e3f98659f45f0e589c0367c7c13877af9a6a1bf1eda40e33e944816b40',
+  sessionsPackageIdV1:
+      '0x1908eee49d7a08d74a537d7f23766b363a145517fe0d3e0d85635d1682831ffd',
+  sessionsConfig:
+      '0xc096b97289821b27badfdf758d614bbbfa386f93d3faa409ecc1fcc6075d1186',
+  accountPackageId:
+      '0x1e57d6554b99e4ca68330322c3e5c409ba1b681642726b603bf1be92c1840ca9',
+  accountRegistry:
+      '0x511e11f7f5d5c1043d795180657603d59e06e90fbfcafd3f90c67ff0836bbd0c',
+  deepbookRegistry:
+      '0x7c256edbda983a2cd6f946655f4bf3f00a41043993781f8674a7046e8c0e11d1',
+  deepbookCoreAccountPackageId:
+      '0x2a3a5f51e1c566e0a77c667596a8212d036b44aeac32790991c9eb97580fabb1',
+  protocolConfig:
+      '0x422a45c31128e69d0310ab3bed28bd14f730acf9f5681f70936d20c60d26bfb0',
+);
+
+/// Scale constants the deployment owns rather than the SDK.
+const TESTNET_UNITS = DeploymentUnits(
+  positionLotSize: 10000,
+  fixedPointScale: 1000000000,
+  quoteCoinDecimals: 6,
+  positionQuantityDecimals: 6,
+);
+
+/// Ids for DeepBook Predict — the `/predict` subpath's slice.
+const testnetPredict = PredictIds(
+  network: 'testnet',
+  packages: PredictPackages(
+    predict:
+        '0x6c2c2d3c2394cf282f4b8462a99c2e814bda0c223796de10b47b36d35fd878f5',
+    predictV1:
+        '0x59d71119e990573a738dd3ff9c4c7d28d6893af69c87c1a7f3a2e90e280ce2f4',
+    account:
+        '0x1e57d6554b99e4ca68330322c3e5c409ba1b681642726b603bf1be92c1840ca9',
+    propbook:
+        '0xa83f9d7651de09672a40cea371c387bf954e0f3092947670d71428d4fbc9edd9',
+  ),
+  objects: PredictObjects(
+    registry:
+        '0x85cfaa857f9dfca75f6ba624eead063c4a1bc9b701201b8f21e1f9c15833ccc4',
+    protocolConfig:
+        '0x422a45c31128e69d0310ab3bed28bd14f730acf9f5681f70936d20c60d26bfb0',
+    poolVault:
+        '0x6fd178a49848387d60ccfd3e53bf06969929970246a3a7983ae5bb2a5ed52ee3',
+    oracleRegistry:
+        '0xf4ad65184b2e4e9d8e50d44b02a76c64e9607f63e3dbc362e110c99e20a17161',
+    accountRegistry:
+        '0x511e11f7f5d5c1043d795180657603d59e06e90fbfcafd3f90c67ff0836bbd0c',
+  ),
+  quoteCoinType:
+      '0xc028557a1ed49e42ed091e115aedefd70a442b184c18fbec5c48d5b6c0b8c184::usdc::USDC',
+  coinTypes: PredictCoinTypes(
+    plp:
+        '0x59d71119e990573a738dd3ff9c4c7d28d6893af69c87c1a7f3a2e90e280ce2f4::plp::PLP',
+    deep:
+        '0x36dbef866a1d62bf7328989a10fb2f07d769f4ee587c0de4a0a256e57e0a58a8::deep::DEEP',
+  ),
+  units: TESTNET_UNITS,
+  underlyings: {
+    'BTC': UnderlyingIds(
+      symbol: 'BTC',
+      propbookUnderlyingId: 1,
+      pythFeed:
+          '0x8ef99c3d14e57612d09a67bcc9b5bff568a80992df6beca2bfcd922973192faa',
+      blockScholesValueStore:
+          '0x1e5142471311505a7428b072230c9ffe8a747b3b9392720e39246af4aea08216',
+      blockScholesSviStore:
+          '0x0f1cbefd1dd2ba08ae700a7067c32e0718edf926fa18cea80bd231c02d509ece',
+    ),
+  },
+);

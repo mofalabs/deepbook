@@ -71,7 +71,32 @@ class MarginPool {
 class PythConfig {
   final String pythStateId;
   final String wormholeStateId;
-  const PythConfig({required this.pythStateId, required this.wormholeStateId});
+
+  /// Hermes endpoint serving update data for this deployment.
+  final String? hermesEndpoint;
+
+  /// Bearer token for the Hermes endpoint. The one serving Pyth's upgraded
+  /// Core answers 401 without it, so pushing price updates needs this set.
+  ///
+  /// Prefer the client-level `pythAccessToken` option, which sets this
+  /// without having to restate the state object ids. Supply the token at
+  /// runtime — do not commit it.
+  final String? accessToken;
+
+  const PythConfig({
+    required this.pythStateId,
+    required this.wormholeStateId,
+    this.hermesEndpoint,
+    this.accessToken,
+  });
+
+  /// A copy of this config with [accessToken] replaced.
+  PythConfig withAccessToken(String accessToken) => PythConfig(
+        pythStateId: pythStateId,
+        wormholeStateId: wormholeStateId,
+        hermesEndpoint: hermesEndpoint,
+        accessToken: accessToken,
+      );
 }
 
 /// Per-network DeepBook package/object ids.

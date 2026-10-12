@@ -139,6 +139,7 @@ MoveCallBuilder swapQuoteToBase(
       );
 }
 
+/// Twin: `liquidate_base_upgraded`. Edit both.
 MoveCallBuilder liquidateBase(
     {required dynamic arguments,
     String? package,
@@ -172,6 +173,7 @@ MoveCallBuilder liquidateBase(
       );
 }
 
+/// Twin: `liquidate_quote_upgraded`. Edit both.
 MoveCallBuilder liquidateQuote(
     {required dynamic arguments,
     String? package,
@@ -214,5 +216,83 @@ MoveCallBuilder balance(
         '$packageAddress::liquidation_vault::balance',
         typeArguments: typeArguments,
         arguments: normalizeMoveArguments(tx, arguments, [null], ['self']),
+      );
+}
+
+/// `liquidate_base` against Pyth's upgraded Core.
+///
+/// Pyth is replacing Core with a separately published package, so its
+/// `PriceInfoObject` is a distinct Move type and `liquidate_base`'s frozen
+/// signature can never accept it. Once Pyth stops publishing legacy Core the legacy
+/// entry aborts on staleness by itself, and this becomes the only way the vault can
+/// liquidate. The gate (`should_liquidate`) and the settlement
+/// (`settle_base_liquidation`) are shared with the legacy entry; the body between
+/// them is duplicated, because the two `PriceInfoObject` types cannot be unified.
+/// Twin: `liquidate_base`. Edit both.
+MoveCallBuilder liquidateBaseUpgraded(
+    {required dynamic arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
+  final packageAddress = package ?? '@deepbook/margin-liquidation';
+  return (tx) => tx.moveCall(
+        '$packageAddress::liquidation_vault::liquidate_base_upgraded',
+        typeArguments: typeArguments,
+        arguments: normalizeMoveArguments(tx, arguments, [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          '0x1::option::Option<u64>',
+          '0x2::clock::Clock'
+        ], [
+          'self',
+          'marginManager',
+          'registry',
+          'baseOracle',
+          'quoteOracle',
+          'baseMarginPool',
+          'quoteMarginPool',
+          'pool',
+          'repayAmount'
+        ]),
+      );
+}
+
+/// `liquidate_quote` against Pyth's upgraded Core. See `liquidate_base_upgraded`.
+/// Twin: `liquidate_quote`. Edit both.
+MoveCallBuilder liquidateQuoteUpgraded(
+    {required dynamic arguments,
+    String? package,
+    List<String> typeArguments = const []}) {
+  final packageAddress = package ?? '@deepbook/margin-liquidation';
+  return (tx) => tx.moveCall(
+        '$packageAddress::liquidation_vault::liquidate_quote_upgraded',
+        typeArguments: typeArguments,
+        arguments: normalizeMoveArguments(tx, arguments, [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          '0x1::option::Option<u64>',
+          '0x2::clock::Clock'
+        ], [
+          'self',
+          'marginManager',
+          'registry',
+          'baseOracle',
+          'quoteOracle',
+          'baseMarginPool',
+          'quoteMarginPool',
+          'pool',
+          'repayAmount'
+        ]),
       );
 }

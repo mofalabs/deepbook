@@ -350,10 +350,7 @@ class MarginAdminContract {
           String coinKey, int maxConfBps, int maxEwmaDifferenceBps) =>
       (tx) {
         final coin = _config.getCoin(coinKey);
-        final feed = coin.feed;
-        if (feed == null) {
-          throw DeepBookError('Coin feed not found');
-        }
+        final feed = _config.getFeedId(coinKey);
         final priceFeedInput =
             _hexToBytes(feed.startsWith('0x') ? feed.substring(2) : feed);
         return oracle.newCoinTypeDataFromCurrency(

@@ -1,3 +1,52 @@
+## 0.2.0
+
+**Margin moves to Pyth's upgraded Core; Predict, sessions and the account
+primitive arrive.** Aligned with the official `@mysten/deepbook-v3` v2.6.8
+(pinned at MystenLabs/ts-sdks commit `045187f2`). Method names and signatures
+are unchanged from 0.1.0; what changes is which on-chain modules the margin
+surface targets.
+
+- **Margin / Pyth upgraded Core** (official 2.0.0): every oracle-taking margin
+  entrypoint now targets the parallel `_upgraded` Move modules
+  (`margin_manager_upgraded`, `pool_proxy_upgraded`,
+  `liquidate_base_upgraded` / `liquidate_quote_upgraded`). Requires the
+  upgraded `deepbook_margin` publication, enabled on the network's
+  `MarginRegistry` — package ids move to testnet v16 / mainnet v7. Entrypoints
+  that take no oracle stay on the base modules.
+- **Hermes v2**: price updates fetch from `/v2/updates/price/latest` (v1
+  `/api/latest_vaas` is deprecated upstream). New `pythAccessToken` client
+  option (`Authorization: Bearer`) — the endpoint serving the upgraded Core
+  answers 401 without one. 4xx responses are not retried, and error messages
+  never carry the token.
+- **New: `package:deepbook/predict.dart`** — DeepBook Predict (prediction
+  markets): market discovery, quotes, mint/redeem/claim, PLP with price
+  floors, typed receipts, and an exact-integer port of the on-chain fee path
+  (`cost.*`: all-in mint cost, budget sizing, live-redeem proceeds) plus the
+  client-side board pricer. Mainnet settles in Circle native USDC; read
+  `quoteCoinType` from the config rather than assuming a symbol.
+- **New: `package:deepbook/account.dart`** — the shared on-chain account
+  primitive (`AccountContract`, `generateAuth`, `Account`/`AccountWrapper`
+  BCS) that DeepBook's core wrapper and Predict both build on.
+- **New: `package:deepbook/sessions.dart`** — time-limited trading sessions
+  over a canonical Account: authorize/revoke/expiry, Predict session wrappers,
+  and grant enumeration helpers.
+- Generated bindings regenerated against the new baseline: 143 files,
+  331 structs + 859 move-call builders (was 213/563), including the Predict,
+  sessions, account and propbook (Block-Scholes) packages and the shared
+  deployment records (`getDeployment` / `getUnits`).
+- Fixed: the 93 `contracts/pyth/*` builders shipped in 0.1.0 could not accept
+  arguments (a code-generator defect) — callable now.
+- Verification: 44 fixture suites generated from the official TS SDK —
+  transaction byte-compare (spot output is byte-identical to 0.1.0), a
+  bit-exact parity matrix for the Predict fee engine, and derivation /
+  event-decode parity — plus mainnet smoke of every pinned id, live testnet
+  reads, real testnet execution of the margin write path (manager creation
+  on the v16 package and a deposit through `margin_manager_upgraded`), the
+  web (Chrome) suite, and an on-device acceptance run inside a real Flutter
+  app on the iOS simulator.
+- Known gap: the margin localnet real-execution suite needs a re-vendored
+  Move deployment with the upgraded modules and is skipped until then.
+
 ## 0.1.0
 
 **Complete rewrite for DeepBook V3.** Breaking: nothing from 0.0.x survives.

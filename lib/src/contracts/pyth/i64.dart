@@ -17,52 +17,50 @@ final I64 = Bcs.struct('${$moduleName}::I64', {
   'magnitude': SuiBcs.U64,
 });
 
-MoveCallBuilder new_({String? package}) {
+MoveCallBuilder new_({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::i64::new',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['u64', 'bool'], []),
+        arguments: normalizeMoveArguments(tx, arguments, ['u64', 'bool'], []),
       );
 }
 
-MoveCallBuilder getIsNegative({String? package}) {
+MoveCallBuilder getIsNegative(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::i64::get_is_negative',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getMagnitudeIfPositive({String? package}) {
+MoveCallBuilder getMagnitudeIfPositive(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::i64::get_magnitude_if_positive',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getMagnitudeIfNegative({String? package}) {
+MoveCallBuilder getMagnitudeIfNegative(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::i64::get_magnitude_if_negative',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder fromU64({String? package}) {
+MoveCallBuilder fromU64({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::i64::from_u64',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, ['u64'], []),
+        arguments: normalizeMoveArguments(tx, arguments, ['u64'], []),
       );
 }

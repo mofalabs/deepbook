@@ -98,14 +98,18 @@ class MarginLiquidationsContract {
                 .option('u64', convertQuantity(repayAmount, baseCoin.scalar))
             : tx.pure.option('u64', null);
 
-        liquidation_vault.liquidateBase(
+        // Unlike the margin package, `margin_liquidation` puts the upgraded
+        // entries in the same module as parallel functions rather than in a
+        // parallel module. The vault's own deposit/withdraw/balance take no
+        // oracle and are unchanged.
+        liquidation_vault.liquidateBaseUpgraded(
           package: _config.LIQUIDATION_PACKAGE_ID,
           arguments: {
             'self': vaultId,
             'marginManager': managerAddress,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
             'pool': pool.address,
@@ -139,14 +143,14 @@ class MarginLiquidationsContract {
                 .option('u64', convertQuantity(repayAmount, quoteCoin.scalar))
             : tx.pure.option('u64', null);
 
-        liquidation_vault.liquidateQuote(
+        liquidation_vault.liquidateQuoteUpgraded(
           package: _config.LIQUIDATION_PACKAGE_ID,
           arguments: {
             'self': vaultId,
             'marginManager': managerAddress,
             'registry': _config.MARGIN_REGISTRY_ID,
-            'baseOracle': baseCoin.priceInfoObjectId!,
-            'quoteOracle': quoteCoin.priceInfoObjectId!,
+            'baseOracle': _config.getPriceInfoObjectId(pool.baseCoin),
+            'quoteOracle': _config.getPriceInfoObjectId(pool.quoteCoin),
             'baseMarginPool': baseMarginPool.address,
             'quoteMarginPool': quoteMarginPool.address,
             'pool': pool.address,

@@ -24,122 +24,124 @@ final PriceInfoObject = Bcs.struct('${$moduleName}::PriceInfoObject', {
   'price_info': PriceInfo,
 });
 
-MoveCallBuilder getIdBytes({String? package}) {
+MoveCallBuilder getIdBytes(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_id_bytes',
         arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['0x2::object::ID', null], []),
+            tx, arguments, ['0x2::object::ID', null], []),
       );
 }
 
-MoveCallBuilder getId({String? package}) {
+MoveCallBuilder getId({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_id',
         arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['0x2::object::ID', null], []),
+            tx, arguments, ['0x2::object::ID', null], []),
       );
 }
 
-MoveCallBuilder contains({String? package}) {
+MoveCallBuilder contains({required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::contains',
         arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['0x2::object::ID', null], []),
+            tx, arguments, ['0x2::object::ID', null], []),
       );
 }
 
-MoveCallBuilder getBalance({String? package}) {
+MoveCallBuilder getBalance(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_balance',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder depositFeeCoins({String? package}) {
+MoveCallBuilder depositFeeCoins(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::deposit_fee_coins',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, [null, null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null, null], []),
       );
 }
 
-MoveCallBuilder newPriceInfo({String? package}) {
+MoveCallBuilder newPriceInfo(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::new_price_info',
-        arguments: normalizeMoveArguments(
-            tx, const <String, dynamic>{}, ['u64', 'u64', null], []),
+        arguments:
+            normalizeMoveArguments(tx, arguments, ['u64', 'u64', null], []),
       );
 }
 
-MoveCallBuilder uidToInner({String? package}) {
+MoveCallBuilder uidToInner(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::uid_to_inner',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getPriceInfoFromPriceInfoObject({String? package}) {
+MoveCallBuilder getPriceInfoFromPriceInfoObject(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_price_info_from_price_info_object',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getPriceIdentifier({String? package}) {
+MoveCallBuilder getPriceIdentifier(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_price_identifier',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getPriceFeed({String? package}) {
+MoveCallBuilder getPriceFeed(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_price_feed',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getAttestationTime({String? package}) {
+MoveCallBuilder getAttestationTime(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_attestation_time',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
 
-MoveCallBuilder getArrivalTime({String? package}) {
+MoveCallBuilder getArrivalTime(
+    {required List<dynamic> arguments, String? package}) {
   final packageAddress = package ??
       '0xabf837e98c26087cba0883c0a7a28326b1fa3c5e1e2c5abdb486f9e8f594c837';
   return (tx) => tx.moveCall(
         '$packageAddress::price_info::get_arrival_time',
-        arguments:
-            normalizeMoveArguments(tx, const <String, dynamic>{}, [null], []),
+        arguments: normalizeMoveArguments(tx, arguments, [null], []),
       );
 }
